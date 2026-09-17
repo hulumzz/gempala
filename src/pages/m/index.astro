@@ -1,6 +1,154 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { members } from '../../data/site';
-const fallback = JSON.stringify(members);
+import { members, getMemberPhotoUrl } from '../../data/site';
+const fallback = JSON.stringify(
+  members
+    .filter((member) => member.code)
+    .map((member) => ({ ...member, photoUrl: getMemberPhotoUrl(member) }))
+);
 ---
-<BaseLayout title="Member Identity — Gempala" description="Verifikasi identitas member Gempala."><section class="member-page"><div class="shell member-shell"><a class="back" href="/members">← MEMBER DIRECTORY</a><div id="checking" class="checking"><div class="scan-logo">G</div><p class="eyebrow">CHECKING MEMBER IDENTITY</p><div class="scanbar"><i></i></div></div><div id="profile" class="profile" hidden><div class="identity-card card"><div class="identity-head"><span class="brand-mini">GEMPALA®</span><span class="label lime">MEMBER IDENTITY</span></div><div class="portrait-panel"><div class="portrait-big" id="portrait-letter">G</div><div class="photo-label">OFFICIAL PORTRAIT</div></div><div class="identity-data"><span class="eyebrow" id="member-code"></span><h1 id="member-name">—</h1><p id="member-role"></p><div class="status-line"><span>STATUS</span><strong id="member-status">● ACTIVE MEMBER</strong></div></div></div><div class="profile-info"><div class="verified"><span>✓</span><div><b>VERIFIED MEMBER</b><small>GEMPALA ORGANIZATION</small></div></div><h2 id="member-nickname">—</h2><p id="member-bio"></p><dl><div><dt>JOINED</dt><dd id="member-joined"></dd></div><div><dt>DIVISION</dt><dd id="member-division"></dd></div><div><dt>MEMBER ID</dt><dd id="member-id-repeat"></dd></div></dl><a class="brutal-button" href="/">View Gempala ↗</a></div></div><div id="not-found" class="not-found card" hidden><span>404 / MEMBER</span><h1 class="display md">MEMBER<br/>NOT FOUND.</h1><p id="missing-code"></p><a class="brutal-button" href="/members">Open directory ↗</a></div></div></section><script define:vars={{fallback}} is:inline>const mocks=JSON.parse(fallback);const code=decodeURIComponent(location.pathname.split('/').filter(Boolean).pop()||'').toUpperCase();const checking=document.querySelector('#checking');const profile=document.querySelector('#profile');const notFound=document.querySelector('#not-found');const set=(id,value)=>{const el=document.querySelector(id);if(el)el.textContent=value||'—'};function render(m){set('#member-code',m.code);set('#member-name',m.name);set('#member-role',`${m.role} / ${m.division}`);set('#member-status',`● ${m.status} MEMBER`);set('#member-nickname',m.nickname);set('#member-bio',m.bio);set('#member-joined',m.joined);set('#member-division',m.division);set('#member-id-repeat',m.code);set('#portrait-letter',(m.nickname||m.name).slice(0,1));checking.hidden=true;profile.hidden=false}function missing(){checking.hidden=true;notFound.hidden=false;set('#missing-code',`${code || 'UNKNOWN'} is not registered in the Gempala member directory.`)}async function load(){await new Promise(r=>setTimeout(r,420));try{const res=await fetch(`/api/members/${encodeURIComponent(code)}`);if(res.ok){const json=await res.json();if(json?.member)return render(json.member)}}catch{}const mock=mocks.find(m=>m.code===code);mock?render(mock):missing()}load();</script><style>.member-page{min-height:calc(100vh - 92px);background:var(--ink);color:var(--paper);padding:38px 0 90px}.back{font:800 10px Archivo;letter-spacing:.08em}.member-shell{position:relative}.checking{min-height:70vh;display:grid;place-items:center;align-content:center;gap:18px}.scan-logo{width:100px;height:100px;background:var(--purple);color:var(--ink);border:3px solid var(--paper);display:grid;place-items:center;font:900 55px Archivo;transform:rotate(-4deg)}.scanbar{width:min(320px,80vw);height:10px;border:2px solid var(--paper);overflow:hidden}.scanbar i{display:block;height:100%;width:35%;background:var(--lime);animation:scan .7s ease-in-out infinite alternate}@keyframes scan{to{transform:translateX(190%)}}.profile{display:grid;grid-template-columns:1fr .9fr;gap:70px;align-items:center;padding-top:45px}.identity-card{background:var(--paper);color:var(--ink);box-shadow:9px 9px 0 var(--purple)}.identity-head{display:flex;justify-content:space-between;align-items:center;padding:18px;border-bottom:var(--line)}.brand-mini{font:900 18px Archivo}.portrait-panel{min-height:430px;background:var(--purple);border-bottom:var(--line);display:grid;place-items:center;position:relative;overflow:hidden}.portrait-panel:before{content:"";position:absolute;width:330px;height:330px;border:3px solid var(--ink);border-radius:50%;opacity:.18}.portrait-big{font:900 180px Archivo;opacity:.17}.photo-label{position:absolute;bottom:18px;left:18px;background:var(--lime);border:var(--line);padding:8px;font:900 9px Archivo;transform:rotate(-3deg)}.identity-data{padding:24px}.identity-data h1{font:900 clamp(36px,5vw,64px)/.95 Archivo;letter-spacing:-.055em;margin:12px 0}.identity-data>p{font-size:12px;font-weight:700}.status-line{display:flex;justify-content:space-between;border-top:var(--line);margin-top:26px;padding-top:16px;font:800 10px Archivo}.status-line strong{color:#2a7600}.verified{display:inline-flex;align-items:center;gap:14px;background:var(--lime);color:var(--ink);border:var(--line);box-shadow:4px 4px var(--purple);padding:13px 17px;transform:rotate(-2deg)}.verified>span{font:900 28px Archivo}.verified b,.verified small{display:block;font-family:Archivo}.verified b{font-size:12px}.verified small{font-size:8px;margin-top:3px}.profile-info h2{font:900 clamp(54px,8vw,105px)/.9 Archivo;letter-spacing:-.065em;margin:45px 0 20px}.profile-info>p{font-size:15px;line-height:1.75;max-width:520px;color:#d8d3c6}.profile-info dl{border-block:2px solid var(--paper);margin:30px 0}.profile-info dl div{display:grid;grid-template-columns:130px 1fr;padding:13px 0;border-bottom:1px solid #595959}.profile-info dl div:last-child{border:0}.profile-info dt{font:800 9px Archivo}.profile-info dd{margin:0;font:700 11px Archivo}.not-found{color:var(--ink);max-width:780px;margin:70px auto;padding:50px}.not-found>span{font:800 10px Archivo}.not-found p{margin:25px 0 35px}@media(max-width:800px){.member-page{min-height:100vh}.profile{grid-template-columns:1fr;gap:45px}.portrait-panel{min-height:350px}.profile-info h2{margin-top:30px}.not-found{padding:30px}}</style></BaseLayout>
+<BaseLayout title="Member Identity — Gempala" description="Verifikasi identitas member Gempala.">
+  <section class="member-page">
+    <div class="shell member-shell">
+      <a class="back" href="/members">← MEMBER DIRECTORY</a>
+
+      <div id="checking" class="checking">
+        <div class="scan-logo">G</div>
+        <p class="eyebrow">CHECKING MEMBER IDENTITY</p>
+        <div class="scanbar"><i></i></div>
+      </div>
+
+      <div id="profile" class="profile" hidden>
+        <div class="identity-card card">
+          <div class="identity-head"><span class="brand-mini">GEMPALA®</span><span class="label lime">MEMBER IDENTITY</span></div>
+          <div class="portrait-panel">
+            <img id="member-photo" src="/placeholder-member.svg" alt="Foto member Gempala" width="300" height="400" />
+            <div class="portrait-grid" aria-hidden="true"></div>
+            <div class="photo-label">OFFICIAL PORTRAIT</div>
+          </div>
+          <div class="identity-data">
+            <span class="eyebrow" id="member-code"></span>
+            <h1 id="member-name">—</h1>
+            <p id="member-role"></p>
+            <div class="status-line"><span>STATUS</span><strong id="member-status">● ACTIVE MEMBER</strong></div>
+          </div>
+        </div>
+
+        <div class="profile-info">
+          <div class="verified"><span>✓</span><div><b>VERIFIED MEMBER</b><small>GEMPALA ORGANIZATION</small></div></div>
+          <h2 id="member-nickname">—</h2>
+          <p id="member-bio"></p>
+          <dl>
+            <div><dt>JOINED</dt><dd id="member-joined"></dd></div>
+            <div><dt>DIVISION</dt><dd id="member-division"></dd></div>
+            <div><dt>MEMBER ID</dt><dd id="member-id-repeat"></dd></div>
+          </dl>
+          <a class="brutal-button" href="/">View Gempala ↗</a>
+        </div>
+      </div>
+
+      <div id="not-found" class="not-found card" hidden>
+        <span>404 / MEMBER</span>
+        <h1 class="display md">MEMBER<br/>NOT FOUND.</h1>
+        <p id="missing-code"></p>
+        <a class="brutal-button" href="/members">Open directory ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <script define:vars={{ fallback }} is:inline>
+    const mocks = JSON.parse(fallback);
+    const code = decodeURIComponent(location.pathname.split('/').filter(Boolean).pop() || '').toUpperCase();
+    const checking = document.querySelector('#checking');
+    const profile = document.querySelector('#profile');
+    const notFound = document.querySelector('#not-found');
+    const photo = document.querySelector('#member-photo');
+    const placeholder = '/placeholder-member.svg';
+
+    const set = (id, value) => {
+      const el = document.querySelector(id);
+      if (el) el.textContent = value || '—';
+    };
+
+    const resolvePhoto = (member) => {
+      if (member?.photoUrl) return member.photoUrl;
+      if (!member?.photo) return placeholder;
+      if (/^https?:\/\//i.test(member.photo) || member.photo.startsWith('/')) return member.photo;
+      return `/members/${member.photo}`;
+    };
+
+    function render(member) {
+      set('#member-code', member.code);
+      set('#member-name', member.name);
+      set('#member-role', [member.role, member.division].filter(Boolean).join(' / '));
+      set('#member-status', `● ${member.status || 'ACTIVE'} MEMBER`);
+      set('#member-nickname', member.nickname || member.name);
+      set('#member-bio', member.bio);
+      set('#member-joined', member.joined);
+      set('#member-division', member.division);
+      set('#member-id-repeat', member.code);
+
+      if (photo) {
+        photo.src = resolvePhoto(member);
+        photo.alt = member.name ? `Foto ${member.name}` : 'Foto member Gempala';
+        photo.onerror = () => {
+          photo.onerror = null;
+          photo.src = placeholder;
+        };
+      }
+
+      checking.hidden = true;
+      profile.hidden = false;
+    }
+
+    function missing() {
+      checking.hidden = true;
+      notFound.hidden = false;
+      set('#missing-code', `${code || 'UNKNOWN'} is not registered in the Gempala member directory.`);
+    }
+
+    async function load() {
+      await new Promise((resolve) => setTimeout(resolve, 280));
+
+      // Static member data is authoritative for IDs printed on current Gempala cards.
+      const local = mocks.find((member) => member.code === code);
+      if (local) return render(local);
+
+      // Neon stays as a fallback for future members that are added dynamically.
+      try {
+        const response = await fetch(`/api/members/${encodeURIComponent(code)}`);
+        if (response.ok) {
+          const json = await response.json();
+          if (json?.member) return render(json.member);
+        }
+      } catch {}
+
+      missing();
+    }
+
+    load();
+  </script>
+
+  <style>
+    .member-page{min-height:calc(100vh - 92px);background:var(--ink);color:var(--paper);padding:38px 0 90px}
+    .back{font:800 10px Archivo;letter-spacing:.08em}
+    .member-shell{position:relative}
+    .checking{min-height:70vh;display:grid;place-items:center;align-content:center;gap:18px}
+    .scan-logo{width:100px;height:100px;background:var(--purple);color:var(--ink);border:3px solid var(--paper);display:grid;place-items:center;font:900 55px Archivo;transform:rotate(-4deg)}
+    .scanbar{width:min(320px,80vw);height:10px;border:2px solid var(--paper);overflow:hidden}.scanbar i{display:block;height:100%;width:35%;background:var(--lime);animation:scan .7s ease-in-out infinite alternate}@keyframes scan{to{transform:translateX(190%)}}
+    .profile{display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:clamp(42px,7vw,90px);align-items:center;padding-top:45px}
+    .identity-card{background:var(--paper);color:var(--ink);box-shadow:9px 9px 0 var(--purple);overflow:hidden}
+    .identity-head{display:flex;justify-content:space-between;align-items:center;padding:18px;border-bottom:var(--line);gap:12px}.brand-mini{font:900 18px Archivo}
+    .portrait-panel{aspect-ratio:3/4;background:var(--purple);border-bottom:var(--line);position:relative;overflow:hidden;isolation:isolate}
+    .portrait-panel img{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;position:relative;z-index:2}
+    .portrait-grid{position:absolute;inset:0;z-index:1;opacity:.13;background-image:linear-gradient(var(--ink) 1px,transparent 1px),linear-gradient(90deg,var(--ink) 1px,transparent 1px);background-size:34px 34px}
+    .photo-label{position:absolute;z-index:3;bottom:18px;left:18px;background:var(--lime);border:var(--line);padding:8px;font:900 9px Archivo;transform:rotate(-3deg);box-shadow:3px 3px var(--ink)}
+    .identity-data{padding:24px}.identity-data h1{font:900 clamp(34px,5vw,60px)/.95 Archivo;letter-spacing:-.055em;margin:12px 0;overflow-wrap:anywhere}.identity-data>p{font-size:12px;font-weight:700}
+    .status-line{display:flex;justify-content:space-between;border-top:var(--line);margin-top:26px;padding-top:16px;font:800 10px Archivo;gap:20px}.status-line strong{color:#2a7600}
+    .verified{display:inline-flex;align-items:center;gap:14px;background:var(--lime);color:var(--ink);border:var(--line);box-shadow:4px 4px var(--purple);padding:13px 17px;transform:rotate(-2deg)}.verified>span{font:900 28px Archivo}.verified b,.verified small{display:block;font-family:Archivo}.verified b{font-size:12px}.verified small{font-size:8px;margin-top:3px}
+    .profile-info h2{font:900 clamp(52px,8vw,105px)/.9 Archivo;letter-spacing:-.065em;margin:45px 0 20px;overflow-wrap:anywhere}.profile-info>p{font-size:15px;line-height:1.75;max-width:520px;color:#d8d3c6}
+    .profile-info dl{border-block:2px solid var(--paper);margin:30px 0}.profile-info dl div{display:grid;grid-template-columns:130px 1fr;padding:13px 0;border-bottom:1px solid #595959}.profile-info dl div:last-child{border:0}.profile-info dt{font:800 9px Archivo}.profile-info dd{margin:0;font:700 11px Archivo}
+    .not-found{color:var(--ink);max-width:780px;margin:70px auto;padding:50px}.not-found>span{font:800 10px Archivo}.not-found p{margin:25px 0 35px}
+    @media(max-width:800px){.member-page{min-height:100vh}.profile{grid-template-columns:1fr;gap:45px}.identity-card{max-width:520px;width:100%;margin-inline:auto}.profile-info h2{margin-top:30px}.not-found{padding:30px}}
+  </style>
+</BaseLayout>
