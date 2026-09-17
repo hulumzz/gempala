@@ -1,52 +1,66 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { members, getMemberPhotoUrl } from '../data/site';
+import MemberFilterDefs from '../components/MemberFilterDefs.astro';
+import { members, getMemberPhotoUrl, getMemberTone, hasUploadedMemberPhoto, hasBlackBackgroundMemberPhoto } from '../data/site';
 ---
 <BaseLayout title="Members — Gempala">
+  <MemberFilterDefs />
   <section class="page-hero shell">
     <div class="section-kicker eyebrow">MEMBER DIRECTORY / VERIFIED</div>
     <h1 class="display xl">THE<br/>PEOPLE.</h1>
-    <p class="lead">Cari nama atau Member ID. Setiap member yang sudah memiliki identitas resmi bisa dibuka langsung lewat QR member card Gempala.</p>
+    <p class="lead">Cari nama, nickname, atau Member ID. Profil dengan identitas resmi dapat dibuka langsung melalui QR member card Gempala.</p>
   </section>
 
   <section class="section directory">
     <div class="shell">
-      <div class="search-wrap">
-        <input id="member-search" class="input-brutal" type="search" placeholder="Search member / GMP-026-xxx..." autocomplete="off" />
-        <span aria-hidden="true">⌕</span>
+      <div class="directory-toolbar">
+        <div class="search-wrap">
+          <input id="member-search" class="input-brutal" type="search" placeholder="Search name / nickname / GMP-026-xxx..." autocomplete="off" />
+          <span aria-hidden="true">⌕</span>
+        </div>
+        <div class="directory-note eyebrow">PORTRAIT ARCHIVE / 2026</div>
       </div>
 
       <div class="member-grid" id="member-grid">
         {members.map((m, index) => {
           const identified = Boolean(m.code && m.name);
           const photoUrl = getMemberPhotoUrl(m);
-          const searchValue = `${m.name} ${m.nickname} ${m.code} ${m.role}`.toLowerCase();
-          const tone = `tone-${index % 4}`;
+          const hasPhoto = hasUploadedMemberPhoto(m);
+          const blackKey = hasBlackBackgroundMemberPhoto(m);
+          const searchValue = `${m.name} ${m.nickname} ${m.code}`.toLowerCase();
+          const tone = getMemberTone(index);
+          const number = String(index + 1).padStart(2, '0');
 
           return identified ? (
             <a class="member-card card" href={`/m/${m.code}`} data-search={searchValue}>
-              <div class:list={['member-photo', tone]}>
-                <img src={photoUrl} alt={`Foto ${m.name}`} loading="lazy" width="300" height="400" />
-                <b>PORTRAIT / {String(index + 1).padStart(2, '0')}</b>
+              <div class:list={['member-visual', `tone-${tone}`, !hasPhoto && 'no-photo']}>
+                <div class="visual-top"><span>MEMBER / {number}</span><i aria-hidden="true"></i></div>
+                <span class="visual-number" aria-hidden="true">{number}</span>
+                <span class="shape shape-a" aria-hidden="true"></span>
+                <span class="shape shape-b" aria-hidden="true"></span>
+                <img class:list={[blackKey && 'black-key']} src={photoUrl} alt={hasPhoto ? `Foto ${m.name}` : `Foto ${m.name} belum tersedia`} loading="lazy" width="1050" height="1400" />
+                <b class="portrait-label">{hasPhoto ? 'GEMPALA® PORTRAIT' : 'PHOTO PENDING'}</b>
               </div>
               <div class="member-info">
                 <div class="member-meta"><span class="eyebrow">{m.code}</span><span class:list={['status', m.status === 'ACTIVE' && 'active']}>● {m.status}</span></div>
                 <h2>{m.name}</h2>
-                <p>{m.role} / {m.division}</p>
-                <span class="open">VIEW ID ↗</span>
+                <div class="member-foot"><p>{m.role} / {m.division}</p><span class="open">VIEW ID ↗</span></div>
               </div>
             </a>
           ) : (
-            <article class="member-card card pending-card" data-search="member pending">
-              <div class:list={['member-photo', tone]}>
-                <img src={photoUrl} alt="Foto member Gempala" loading="lazy" width="300" height="400" />
-                <b>PORTRAIT / {String(index + 1).padStart(2, '0')}</b>
+            <article class="member-card card pending-card" data-search={searchValue || 'profile data pending'}>
+              <div class:list={['member-visual', `tone-${tone}`]}>
+                <div class="visual-top"><span>MEMBER / {number}</span><i aria-hidden="true"></i></div>
+                <span class="visual-number" aria-hidden="true">{number}</span>
+                <span class="shape shape-a" aria-hidden="true"></span>
+                <span class="shape shape-b" aria-hidden="true"></span>
+                <img class:list={[blackKey && 'black-key']} src={photoUrl} alt="Foto member Gempala" loading="lazy" width="1050" height="1400" />
+                <b class="portrait-label">GEMPALA® PORTRAIT</b>
               </div>
               <div class="member-info pending-info">
-                <div class="member-meta"><span class="eyebrow blank-field" aria-hidden="true">&nbsp;</span><span class="pending-badge">DATA PENDING</span></div>
-                <h2 class="blank-name" aria-label="Nama belum tersedia">&nbsp;</h2>
-                <p class="blank-detail" aria-label="Identitas belum tersedia">&nbsp;</p>
-                <span class="open muted">IDENTITY NOT PUBLISHED</span>
+                <div class="member-meta"><span class="eyebrow">PROFILE</span><span class="pending-badge">DATA PENDING</span></div>
+                <h2 class="pending-title">PROFILE DATA<br/>PENDING</h2>
+                <div class="member-foot"><p>Identity has not been published.</p><span class="open muted">NO MEMBER LINK</span></div>
               </div>
             </article>
           );
@@ -55,7 +69,7 @@ import { members, getMemberPhotoUrl } from '../data/site';
 
       <div id="member-empty" class="empty-state" hidden>
         <strong>NO MEMBER FOUND.</strong>
-        <p>Coba nama atau Member ID yang lain.</p>
+        <p>Coba nama, nickname, atau Member ID yang lain.</p>
       </div>
     </div>
   </section>
@@ -78,29 +92,25 @@ import { members, getMemberPhotoUrl } from '../data/site';
 
   <style>
     .directory{background:var(--purple);border-top:var(--line)}
-    .search-wrap{position:relative;max-width:760px;margin:0 auto 50px}
-    .search-wrap span{position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:28px;font-weight:900;pointer-events:none}
-    .member-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;align-items:start}
+    .directory-toolbar{display:grid;grid-template-columns:minmax(0,760px) 1fr;align-items:end;gap:24px;margin-bottom:48px}
+    .search-wrap{position:relative}.search-wrap span{position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:28px;font-weight:900;pointer-events:none}.directory-note{text-align:right;color:var(--paper)}
+    .member-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;align-items:start}
     .member-card{overflow:hidden;transition:transform .16s ease,box-shadow .16s ease;background:var(--paper);min-width:0}
-    a.member-card:hover{transform:translate(-3px,-5px);box-shadow:9px 11px var(--ink)}
-    .member-photo{aspect-ratio:3/4;border-bottom:var(--line);position:relative;overflow:hidden;isolation:isolate;background:var(--lime)}
-    .member-photo:after{content:"";position:absolute;inset:auto -20% -12% -20%;height:42%;background:rgba(20,20,20,.08);transform:rotate(-8deg);z-index:-1}
-    .member-photo.tone-1{background:var(--blue)}
-    .member-photo.tone-2{background:var(--orange)}
-    .member-photo.tone-3{background:var(--paper)}
-    .member-photo img{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;position:relative;z-index:1}
-    .member-photo b{position:absolute;z-index:2;bottom:14px;left:14px;background:var(--paper);border:var(--line);padding:7px 9px;font:800 9px Archivo;transform:rotate(-2deg);box-shadow:3px 3px var(--ink)}
-    .member-info{padding:19px;min-height:175px;display:flex;flex-direction:column}
-    .member-meta{display:flex;justify-content:space-between;align-items:center;gap:12px}
-    .status{font:800 9px Archivo;white-space:nowrap}.status.active{color:#277800}
-    .member-info h2{font:900 clamp(23px,2.5vw,31px)/1 Archivo;margin:18px 0 8px;letter-spacing:-.04em;overflow-wrap:anywhere}
-    .member-info p{font-size:11px;min-height:28px;margin:0}
-    .open{font:900 10px Archivo;display:block;margin-top:auto;padding-top:20px}.open.muted{opacity:.55}
-    .pending-card{cursor:default}.pending-info{background:var(--white)}
-    .pending-badge{font:900 9px Archivo;background:var(--lime);border:2px solid var(--ink);padding:5px 7px;transform:rotate(1deg)}
-    .blank-name,.blank-detail{visibility:hidden}.blank-name{min-height:31px}
-    .empty-state{max-width:650px;margin:auto}.empty-state strong{font:900 30px Archivo}
-    @media(max-width:900px){.member-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:560px){.member-grid{grid-template-columns:1fr;gap:22px}.member-card{max-width:390px;width:100%;margin-inline:auto}.member-info{min-height:165px}}
+    a.member-card:hover{transform:translate(-3px,-5px) rotate(-.35deg);box-shadow:9px 11px var(--ink)}
+    .member-visual{aspect-ratio:3/4;border-bottom:var(--line);position:relative;overflow:hidden;isolation:isolate;background:var(--purple)}
+    .tone-purple{background:var(--purple)}.tone-sky{background:var(--blue)}.tone-lime{background:var(--lime)}.tone-orange{background:var(--orange)}.tone-pink{background:var(--pink)}.tone-cream{background:var(--paper)}
+    .visual-top{position:absolute;z-index:5;top:13px;left:13px;right:13px;display:flex;align-items:center;justify-content:space-between;font:900 9px Archivo;letter-spacing:.1em}.visual-top i{width:12px;height:12px;background:var(--ink);border-radius:50%;box-shadow:2px 2px 0 rgba(255,255,255,.6)}
+    .visual-number{position:absolute;z-index:0;right:-8px;top:32px;font:900 clamp(92px,12vw,160px)/.75 Archivo;letter-spacing:-.09em;color:rgba(20,20,20,.12);transform:rotate(4deg)}
+    .shape{position:absolute;z-index:0;border:2px solid var(--ink);opacity:.55}.shape-a{width:42%;aspect-ratio:1;border-radius:50%;left:-14%;bottom:11%}.shape-b{width:38%;height:13%;right:-9%;top:31%;transform:rotate(-11deg);background:rgba(255,255,255,.23)}
+    .member-visual img{display:block;width:92%;height:91%;object-fit:contain;object-position:center bottom;position:absolute;z-index:2;left:4%;bottom:0}
+    .member-visual.no-photo img{width:70%;height:70%;left:15%;bottom:12%;opacity:.72}
+    .portrait-label{position:absolute;z-index:6;bottom:14px;left:14px;background:var(--paper);border:var(--line);padding:7px 9px;font:900 8px Archivo;letter-spacing:.06em;transform:rotate(-2deg);box-shadow:3px 3px var(--ink)}
+    .member-info{padding:18px 19px 19px;min-height:190px;display:flex;flex-direction:column;background:var(--white)}
+    .member-meta{display:flex;justify-content:space-between;align-items:center;gap:12px}.status{font:900 9px Archivo;white-space:nowrap}.status.active{color:#277800}
+    .member-info h2{font:900 clamp(25px,2.5vw,34px)/.94 Archivo;margin:20px 0 22px;letter-spacing:-.045em;overflow-wrap:anywhere;text-transform:uppercase}
+    .member-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:end;gap:16px;border-top:2px solid var(--ink);padding-top:12px}.member-foot p{font:700 10px/1.4 Archivo;margin:0;max-width:68%}.open{font:900 9px Archivo;white-space:nowrap}.open.muted{opacity:.55}
+    .pending-card{cursor:default}.pending-info{background:var(--paper)}.pending-badge{font:900 9px Archivo;background:var(--lime);border:2px solid var(--ink);padding:5px 7px;transform:rotate(1deg)}.pending-title{font-size:27px!important}.empty-state{max-width:650px;margin:auto}.empty-state strong{font:900 30px Archivo}
+    @media(max-width:900px){.directory-toolbar{grid-template-columns:1fr}.directory-note{text-align:left}.member-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:560px){.member-grid{grid-template-columns:1fr;gap:22px}.member-card{max-width:390px;width:100%;margin-inline:auto}.member-info{min-height:176px}.member-visual img{width:94%;left:3%}.visual-number{font-size:130px}}
   </style>
 </BaseLayout>

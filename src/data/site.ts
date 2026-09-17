@@ -11,22 +11,77 @@ export type Member = {
   photo?: string;
 };
 
+export type Activity = {
+  no: string;
+  title: string;
+  date: string;
+  location: string;
+  category: string;
+  accent: 'lime' | 'blue' | 'orange';
+  image: string;
+  imageAlt: string;
+  orientation: 'portrait' | 'landscape';
+};
+
 import { memberDataset, getMemberByCode } from './members';
-import { photoOnlyMembers, getUploadedMemberPhotoUrl } from './member-assets';
+import {
+  photoOnlyMembers,
+  getUploadedMemberPhotoUrl,
+  hasUploadedMemberPhoto,
+  hasBlackBackgroundMemberPhoto,
+  getMemberTone,
+  memberTones
+} from './member-assets';
 
 export const members = [...memberDataset, ...photoOnlyMembers];
-export { getMemberByCode };
+export { getMemberByCode, hasUploadedMemberPhoto, hasBlackBackgroundMemberPhoto, getMemberTone, memberTones };
 export const getMemberPhotoUrl = getUploadedMemberPhotoUrl;
 
 export const memberPlaceholders = {
   fallbackMemberImage: '/placeholder-member.svg'
 };
 
-export const activities = [
-  { no: '024', title: 'Semarak HUT RI', date: '17.08.2026', location: 'Bojongireng', category: 'Community', accent: 'lime' },
-  { no: '023', title: 'Wisata Religi Megengan', date: '16.02.2026', location: 'Jawa Tengah', category: 'Culture', accent: 'blue' },
-  { no: '022', title: 'Aksi Sosial Pemuda', date: '11.01.2026', location: 'Bojongireng', category: 'Social', accent: 'orange' }
+export const activities: Activity[] = [
+  {
+    no: '024',
+    title: 'Semarak HUT RI',
+    date: '17.08.2026',
+    location: 'Bojongireng',
+    category: 'Community',
+    accent: 'lime',
+    image: '/activities/hut-ri.jpg',
+    imageAlt: 'Dokumentasi Semarak HUT RI bersama Gempala',
+    orientation: 'portrait'
+  },
+  {
+    no: '023',
+    title: 'Wisata Religi Megengan',
+    date: '16.02.2026',
+    location: 'Jawa Tengah',
+    category: 'Culture',
+    accent: 'blue',
+    image: '/activities/megengan.jpg',
+    imageAlt: 'Dokumentasi wisata religi Megengan bersama Gempala',
+    orientation: 'landscape'
+  },
+  {
+    no: '022',
+    title: 'Bagi Takjil Gempala',
+    date: '11.01.2026',
+    location: 'Bojongireng',
+    category: 'Social',
+    accent: 'orange',
+    image: '/activities/sosial.jpg',
+    imageAlt: 'Dokumentasi kegiatan sosial dan bagi takjil Gempala',
+    orientation: 'landscape'
+  }
 ];
+
+export const achievementPhoto = {
+  src: '/activities/achievement.jpg',
+  alt: 'Dokumentasi achievement Gempala bersama piala dan sertifikat',
+  orientation: 'landscape' as const
+};
 
 export const achievements = [
   { year: '2026', title: 'Kolaborasi Pemuda & Warga', note: 'Program kegiatan komunitas lintas generasi di lingkungan Bojongireng.' },

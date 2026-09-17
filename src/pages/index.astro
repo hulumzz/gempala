@@ -1,8 +1,21 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { activities, achievements, members, stories } from '../data/site';
+import MemberFilterDefs from '../components/MemberFilterDefs.astro';
+import {
+  activities,
+  achievements,
+  achievementPhoto,
+  members,
+  stories,
+  getMemberPhotoUrl,
+  hasUploadedMemberPhoto,
+  hasBlackBackgroundMemberPhoto,
+  getMemberTone
+} from '../data/site';
+const featuredMembers = members.filter((member) => member.code && member.name && hasUploadedMemberPhoto(member)).slice(0, 3);
 ---
 <BaseLayout title="Gempala — Youth Movement from Bojongireng">
+  <MemberFilterDefs />
   <section class="hero shell">
     <div class="hero-copy">
       <div class="hero-meta"><span class="label lime">EST. 2021</span><span class="eyebrow">BOJONGIRENG / CENTRAL JAVA</span></div>
@@ -12,9 +25,15 @@ import { activities, achievements, members, stories } from '../data/site';
         <a class="brutal-button" href="/activities">Explore Gempala ↗</a>
       </div>
     </div>
-    <div class="hero-collage" aria-label="Ruang untuk foto kegiatan Gempala">
-      <div class="photo photo-a"><span>DROP PHOTO / 01</span></div>
-      <div class="photo photo-b"><span>DROP PHOTO / 02</span></div>
+    <div class="hero-collage" aria-label="Dokumentasi kegiatan Gempala">
+      <figure class="photo photo-a">
+        <img src={achievementPhoto.src} alt={achievementPhoto.alt} width="1536" height="1152" fetchpriority="high" />
+        <figcaption>ACHIEVEMENT / CREW</figcaption>
+      </figure>
+      <figure class="photo photo-b">
+        <img src="/activities/hut-ri.jpg" alt="Dokumentasi Semarak HUT RI Gempala" width="864" height="1536" fetchpriority="high" />
+        <figcaption>HUT RI / COMMUNITY</figcaption>
+      </figure>
       <div class="photo-note">YOUTH / SOCIAL / CREATIVE<br/>BOJONGIRENG '26</div>
     </div>
   </section>
@@ -29,8 +48,11 @@ import { activities, achievements, members, stories } from '../data/site';
   <section class="section activity-section">
     <div class="shell"><div class="section-head"><div><div class="section-kicker eyebrow">02 / WHAT WE DO</div><h2 class="display lg">RECENT<br/>MOVES.</h2></div><a class="brutal-button" href="/activities">All activities ↗</a></div>
       <div class="activity-grid">
-        {activities.map((activity, index) => <article class:list={['activity-card','card', index === 0 && 'featured']}>
-          <div class:list={['media-placeholder',`media-${activity.accent}`]}><span>ACTIVITY / {activity.no}</span></div>
+        {activities.map((activity, index) => <article class:list={['activity-card','card', activity.orientation, index === 0 && 'featured']}>
+          <figure class="activity-media">
+            <img src={activity.image} alt={activity.imageAlt} loading={index === 0 ? 'eager' : 'lazy'} width={activity.orientation === 'portrait' ? '864' : '1536'} height={activity.orientation === 'portrait' ? '1536' : activity.no === '023' ? '1042' : '1152'} />
+            <figcaption>ACTIVITY / {activity.no}</figcaption>
+          </figure>
           <div class="activity-body"><div><span class:list={['label',activity.accent]}>{activity.category}</span><p class="eyebrow activity-date">{activity.date} / {activity.location}</p></div><h3>{activity.title}</h3><span class="arrow">↗</span></div>
         </article>)}
       </div>
@@ -40,16 +62,27 @@ import { activities, achievements, members, stories } from '../data/site';
   <section class="section shell member-callout">
     <div class="member-copy"><div class="section-kicker eyebrow">03 / THE PEOPLE</div><h2 class="display lg">WHO'S<br/>BEHIND IT?</h2><p class="lead">Bukan logo. Bukan nama organisasi. Gempala adalah orang-orang di dalamnya.</p><a class="brutal-button" href="/members">Open member directory ↗</a></div>
     <div class="member-stack">
-      {members.slice(0,3).map((member,index) => <a class="mini-member card" href={`/m/${member.code}`} style={`--r:${index===0?-3:index===1?2:-1}deg;--x:${index*16}px`}><div class="avatar-faux">{member.nickname.slice(0,1)}</div><div><span class="eyebrow">{member.code}</span><strong>{member.nickname}</strong><small>{member.role}</small></div><span>↗</span></a>)}
+      {featuredMembers.map((member,index) => <a class="mini-member card" href={`/m/${member.code}`} style={`--r:${index===0?-3:index===1?2:-1}deg;--x:${index*16}px`}>
+        <div class:list={['mini-portrait', `tone-${getMemberTone(index)}`]}><img class:list={[hasBlackBackgroundMemberPhoto(member) && 'black-key']} src={getMemberPhotoUrl(member)} alt={`Foto ${member.name}`} loading="lazy" width="1050" height="1400" /></div>
+        <div><span class="eyebrow">{member.code}</span><strong>{member.nickname}</strong><small>{member.role}</small></div><span>↗</span>
+      </a>)}
       <div class="verified-stamp">VERIFIED<br/>MEMBERS ✓</div>
     </div>
   </section>
 
-  <section class="section archive-section"><div class="shell"><div class="section-kicker eyebrow">04 / MILESTONES</div><h2 class="display md">ARCHIVE OF WINS.</h2><div class="archive-list">{achievements.map(item => <a class="archive-row" href="/achievements"><b>{item.year}</b><div><strong>{item.title}</strong><p>{item.note}</p></div><span class="arrow">↗</span></a>)}</div></div></section>
+  <section class="section archive-section"><div class="shell"><div class="section-kicker eyebrow">04 / MILESTONES</div><h2 class="display md">ARCHIVE OF WINS.</h2><div class="archive-layout"><figure class="archive-photo card"><img src={achievementPhoto.src} alt={achievementPhoto.alt} loading="lazy" width="1536" height="1152"/><figcaption>ACHIEVEMENT / GEMPALA ARCHIVE</figcaption></figure><div class="archive-list">{achievements.map(item => <a class="archive-row" href="/achievements"><b>{item.year}</b><div><strong>{item.title}</strong><p>{item.note}</p></div><span class="arrow">↗</span></a>)}</div></div></div></section>
 
   <section class="section shell"><div class="section-head"><div><div class="section-kicker eyebrow">05 / JOURNAL</div><h2 class="display md">STORIES FROM<br/>GEMPALA.</h2></div><a href="/news" class="text-link">ALL STORIES ↗</a></div><div class="story-grid">{stories.map((story,index)=><article class:list={['story-card', index===1&&'purple-story']}><div><span class="eyebrow">{story.date}</span><span class="label">{story.tag}</span></div><h3>{story.title}</h3><a href="/news">READ STORY ↗</a></article>)}</div></section>
 
   <style>
-    .hero{min-height:calc(100vh - 92px);padding:55px 0 75px;display:grid;grid-template-columns:1.25fr .75fr;align-items:center;gap:45px}.hero-meta,.hero-bottom,.section-head{display:flex;align-items:center;justify-content:space-between;gap:24px}.hero-meta{justify-content:flex-start;margin-bottom:24px}.hero h1 span{color:var(--purple);-webkit-text-stroke:2px var(--ink)}.hero-bottom{align-items:flex-end;margin-top:35px}.hero-bottom .lead{margin:0;max-width:430px}.hero-collage{min-height:570px;position:relative}.photo{position:absolute;border:var(--line);box-shadow:var(--shadow);border-radius:var(--radius);display:grid;place-items:center;background:var(--blue);overflow:hidden}.photo:after{content:"";position:absolute;width:130%;height:40px;background:var(--ink);opacity:.08;transform:rotate(-34deg)}.photo span{background:var(--paper);border:var(--line);padding:8px;font:800 10px Archivo;z-index:2}.photo-a{inset:20px 80px 160px 5px;transform:rotate(-4deg)}.photo-b{inset:190px 5px 20px 105px;background:var(--orange);transform:rotate(4deg)}.photo-note{position:absolute;right:5px;top:35px;background:var(--lime);border:var(--line);box-shadow:4px 4px var(--ink);padding:13px;font:800 10px/1.5 Archivo;transform:rotate(5deg)}.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px}.about-copy{padding-top:35px}.about-copy .lead{margin-top:36px}.text-link{display:inline-flex;gap:30px;border-bottom:2px solid var(--ink);padding:10px 0;font:800 13px Archivo;margin-top:20px}.activity-section{background:var(--purple);border-block:var(--line)}.activity-grid{display:grid;grid-template-columns:1.4fr .8fr;gap:24px;margin-top:48px}.activity-card:nth-child(3){grid-column:2}.activity-card.featured{grid-row:span 2}.activity-card.featured .media-placeholder{min-height:500px}.media-lime{background:var(--lime)}.media-blue{background:var(--blue)}.media-orange{background:var(--orange)}.activity-body{padding:20px;display:grid;grid-template-columns:1fr auto;gap:10px}.activity-body h3{font:900 clamp(25px,3vw,46px)/.98 Archivo;letter-spacing:-.04em;margin:12px 0 0;grid-column:1}.activity-date{margin:12px 0 0}.member-callout{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:70px}.member-copy .lead{margin:30px 0}.member-stack{min-height:470px;position:relative;padding-top:35px}.mini-member{position:relative;width:min(430px,90%);margin:0 auto -12px;padding:18px;display:grid;grid-template-columns:66px 1fr auto;align-items:center;gap:16px;transform:translateX(var(--x)) rotate(var(--r));transition:.2s}.mini-member:hover{transform:translateX(var(--x)) rotate(0deg) translateY(-6px)}.mini-member strong,.mini-member small{display:block}.mini-member strong{font:900 22px Archivo;margin:4px 0}.mini-member small{font-size:12px}.avatar-faux{width:66px;height:66px;border:var(--line);border-radius:10px;background:var(--purple);display:grid;place-items:center;font:900 30px Archivo}.verified-stamp{position:absolute;right:0;bottom:0;width:120px;height:120px;border:3px solid var(--ink);border-radius:50%;background:var(--lime);display:grid;place-items:center;text-align:center;font:900 13px/1.2 Archivo;transform:rotate(-12deg)}.archive-section{background:var(--blue);border-block:var(--line)}.archive-list{margin-top:45px}.archive-row b{font:900 20px Archivo}.story-grid{display:grid;grid-template-columns:repeat(3,1fr);border:var(--line);margin-top:45px}.story-card{min-height:360px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;border-right:var(--line);background:var(--white)}.story-card:last-child{border-right:0}.story-card.purple-story{background:var(--purple)}.story-card>div{display:flex;justify-content:space-between;align-items:center}.story-card h3{font:800 clamp(26px,3vw,40px)/1.05 Archivo;letter-spacing:-.035em}.story-card a{font:800 12px Archivo}@media(max-width:800px){.hero{min-height:auto;grid-template-columns:1fr;padding-top:35px}.hero-bottom{align-items:flex-start;flex-direction:column}.hero-collage{min-height:440px}.photo-a{inset:20px 60px 130px 5px}.photo-b{inset:160px 5px 10px 85px}.about-grid,.member-callout{grid-template-columns:1fr;gap:24px}.activity-grid{grid-template-columns:1fr}.activity-card:nth-child(3){grid-column:auto}.activity-card.featured{grid-row:auto}.activity-card.featured .media-placeholder{min-height:320px}.section-head{align-items:flex-start;flex-direction:column}.story-grid{grid-template-columns:1fr}.story-card{border-right:0;border-bottom:var(--line);min-height:280px}.story-card:last-child{border-bottom:0}.member-stack{min-height:420px}.verified-stamp{width:94px;height:94px;font-size:10px}}
+    .hero{min-height:calc(100vh - 92px);padding:55px 0 75px;display:grid;grid-template-columns:1.2fr .8fr;align-items:center;gap:45px}.hero-meta,.hero-bottom,.section-head{display:flex;align-items:center;justify-content:space-between;gap:24px}.hero-meta{justify-content:flex-start;margin-bottom:24px}.hero h1 span{color:var(--purple);-webkit-text-stroke:2px var(--ink)}.hero-bottom{align-items:flex-end;margin-top:35px}.hero-bottom .lead{margin:0;max-width:430px}
+    .hero-collage{min-height:610px;position:relative}.photo{position:absolute;margin:0;border:var(--line);box-shadow:var(--shadow);border-radius:var(--radius);background:var(--paper);padding:8px;overflow:visible}.photo img{width:100%;height:auto;border:2px solid var(--ink);background:var(--ink)}.photo figcaption{position:absolute;background:var(--paper);border:var(--line);padding:7px 9px;font:900 9px Archivo;letter-spacing:.06em;box-shadow:3px 3px var(--ink)}.photo-a{width:78%;left:0;top:42px;transform:rotate(-4deg)}.photo-a figcaption{left:18px;bottom:-16px}.photo-b{width:49%;right:0;bottom:18px;transform:rotate(4deg);z-index:2}.photo-b figcaption{right:12px;bottom:12px}.photo-note{position:absolute;right:0;top:14px;z-index:4;background:var(--lime);border:var(--line);box-shadow:4px 4px var(--ink);padding:13px;font:800 10px/1.5 Archivo;transform:rotate(5deg)}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px}.about-copy{padding-top:35px}.about-copy .lead{margin-top:36px}.text-link{display:inline-flex;gap:30px;border-bottom:2px solid var(--ink);padding:10px 0;font:800 13px Archivo;margin-top:20px}
+    .activity-section{background:var(--purple);border-block:var(--line)}.activity-grid{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);grid-template-areas:"hut meg" "hut social";gap:25px;align-items:start;margin-top:48px}.activity-card:nth-child(1){grid-area:hut}.activity-card:nth-child(2){grid-area:meg;margin-top:52px}.activity-card:nth-child(3){grid-area:social}.activity-media{margin:0;border-bottom:var(--line);position:relative;background:var(--ink);overflow:hidden}.activity-media img{display:block;width:100%;height:auto}.activity-media figcaption{position:absolute;left:14px;bottom:14px;background:var(--paper);border:var(--line);padding:7px 9px;font:900 9px Archivo;box-shadow:3px 3px var(--ink);transform:rotate(-2deg)}.activity-body{padding:20px;display:grid;grid-template-columns:1fr auto;gap:10px}.activity-body h3{font:900 clamp(25px,3vw,46px)/.98 Archivo;letter-spacing:-.04em;margin:12px 0 0;grid-column:1}.activity-date{margin:12px 0 0}
+    .member-callout{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:70px}.member-copy .lead{margin:30px 0}.member-stack{min-height:470px;position:relative;padding-top:35px}.mini-member{position:relative;width:min(440px,92%);margin:0 auto -12px;padding:12px 16px 12px 12px;display:grid;grid-template-columns:78px 1fr auto;align-items:center;gap:16px;transform:translateX(var(--x)) rotate(var(--r));transition:.2s}.mini-member:hover{transform:translateX(var(--x)) rotate(0deg) translateY(-6px)}.mini-member strong,.mini-member small{display:block}.mini-member strong{font:900 22px Archivo;margin:4px 0}.mini-member small{font-size:12px}.mini-portrait{width:78px;height:88px;border:var(--line);position:relative;overflow:hidden}.mini-portrait img{width:100%;height:100%;object-fit:contain;object-position:center bottom}.tone-purple{background:var(--purple)}.tone-sky{background:var(--blue)}.tone-lime{background:var(--lime)}.tone-orange{background:var(--orange)}.tone-pink{background:var(--pink)}.tone-cream{background:var(--paper)}.verified-stamp{position:absolute;right:0;bottom:0;width:120px;height:120px;border:3px solid var(--ink);border-radius:50%;background:var(--lime);display:grid;place-items:center;text-align:center;font:900 13px/1.2 Archivo;transform:rotate(-12deg)}
+    .archive-section{background:var(--blue);border-block:var(--line)}.archive-layout{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);gap:42px;align-items:start;margin-top:45px}.archive-photo{margin:0;background:var(--paper);padding:9px;transform:rotate(-2deg);position:sticky;top:105px}.archive-photo img{width:100%;height:auto;border:2px solid var(--ink)}.archive-photo figcaption{font:900 9px Archivo;letter-spacing:.08em;padding:12px 5px 4px}.archive-list{margin:0}.archive-row b{font:900 20px Archivo}
+    .story-grid{display:grid;grid-template-columns:repeat(3,1fr);border:var(--line);margin-top:45px}.story-card{min-height:360px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;border-right:var(--line);background:var(--white)}.story-card:last-child{border-right:0}.story-card.purple-story{background:var(--purple)}.story-card>div{display:flex;justify-content:space-between;align-items:center}.story-card h3{font:800 clamp(26px,3vw,40px)/1.05 Archivo;letter-spacing:-.035em}.story-card a{font:800 12px Archivo}
+    @media(max-width:900px){.hero{min-height:auto;grid-template-columns:1fr;padding-top:35px}.hero-collage{min-height:600px;max-width:620px;width:100%;margin-inline:auto}.activity-grid{grid-template-columns:1fr;grid-template-areas:"hut" "meg" "social"}.activity-card:nth-child(2){margin-top:0}.archive-layout{grid-template-columns:1fr}.archive-photo{position:relative;top:auto;max-width:650px}.about-grid,.member-callout{grid-template-columns:1fr;gap:24px}.section-head{align-items:flex-start;flex-direction:column}.story-grid{grid-template-columns:1fr}.story-card{border-right:0;border-bottom:var(--line);min-height:280px}.story-card:last-child{border-bottom:0}.member-stack{min-height:420px}.verified-stamp{width:94px;height:94px;font-size:10px}}
+    @media(max-width:560px){.hero-bottom{align-items:flex-start;flex-direction:column}.hero-collage{min-height:500px}.photo-a{width:88%;top:30px}.photo-b{width:53%;bottom:18px}.photo-note{font-size:8px;right:4px}.member-stack{min-height:405px}.mini-member{grid-template-columns:68px 1fr auto;padding-left:9px}.mini-portrait{width:68px;height:78px}.verified-stamp{right:4px}}
   </style>
 </BaseLayout>
