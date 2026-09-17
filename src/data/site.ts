@@ -11,8 +11,12 @@ export type Member = {
   photo?: string;
 };
 
-export { memberDataset as members } from './members';
-export { getMemberByCode, getMemberPhotoUrl } from './members';
+import { memberDataset, getMemberByCode } from './members';
+import { photoOnlyMembers, getUploadedMemberPhotoUrl } from './member-assets';
+
+export const members = [...memberDataset, ...photoOnlyMembers];
+export { getMemberByCode };
+export const getMemberPhotoUrl = getUploadedMemberPhotoUrl;
 
 export const memberPlaceholders = {
   fallbackMemberImage: '/placeholder-member.svg'
