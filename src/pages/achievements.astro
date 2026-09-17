@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { achievements } from '../data/site';
+---
+<BaseLayout title="Achievements — Gempala">
+  <section class="page-hero shell">
+    <div class="section-kicker eyebrow">MILESTONES / ARCHIVE</div>
+    <h1 class="display xl">KEEP THE<br/>RECEIPTS.</h1>
+    <p class="lead">Bukan sekadar piala. Ini arsip hal-hal yang berhasil dibangun, diselesaikan, dan dirayakan bersama.</p>
+  </section>
+  <section class="section wall">
+    <div class="shell">
+      <div class="year-mark">GEMPALA / ARCHIVE OF WINS</div>
+      {achievements.map((item,index)=><article class="win">
+        <div class="win-no">{String(index+1).padStart(2,'0')}</div>
+        <div><span class="label">{item.year}</span><h2>{item.title}</h2><p>{item.note}</p></div>
+        <div class="win-badge">ARCHIVE<br/>✓</div>
+      </article>)}
+    </div>
+  </section>
+  <style>
+    .wall{background:var(--lime);border-top:var(--line)}.year-mark{font:900 12px Archivo;letter-spacing:.12em;border-bottom:var(--line);padding-bottom:16px}.win{display:grid;grid-template-columns:90px 1fr 110px;gap:28px;align-items:center;padding:40px 0;border-bottom:var(--line)}.win-no{font:900 26px Archivo}.win h2{font:900 clamp(35px,5vw,66px)/.95 Archivo;letter-spacing:-.05em;margin:16px 0}.win p{max-width:650px;line-height:1.7}.win-badge{width:90px;height:90px;border:2px solid var(--ink);border-radius:50%;display:grid;place-items:center;text-align:center;font:900 11px Archivo;transform:rotate(8deg);background:var(--paper)}@media(max-width:800px){.win{grid-template-columns:45px 1fr}.win-badge{display:none}}
+  </style>
+</BaseLayout>
