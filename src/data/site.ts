@@ -11,49 +11,12 @@ export type Member = {
   photo?: string;
 };
 
-export const members: Member[] = [
-  {
-    code: 'GMP-026-001',
-    name: 'Khoirul Ulum',
-    nickname: 'Ulum',
-    role: 'Ketua',
-    division: 'Core Team',
-    joined: 2021,
-    status: 'ACTIVE',
-    bio: 'Bergerak bersama Gempala untuk membangun ruang tumbuh, karya, dan kegiatan positif bagi pemuda Bojongireng.',
-    instagram: '@gempala__'
-  },
-  {
-    code: 'GMP-026-002',
-    name: 'Member Gempala',
-    nickname: 'Member 02',
-    role: 'Sekretaris',
-    division: 'Core Team',
-    joined: 2021,
-    status: 'ACTIVE',
-    bio: 'Bagian dari perjalanan Gempala sejak awal.'
-  },
-  {
-    code: 'GMP-026-003',
-    name: 'Member Gempala',
-    nickname: 'Member 03',
-    role: 'Bendahara',
-    division: 'Core Team',
-    joined: 2021,
-    status: 'ACTIVE',
-    bio: 'Menjaga organisasi tetap bertumbuh lewat kerja yang rapi dan konsisten.'
-  },
-  {
-    code: 'GMP-026-004',
-    name: 'Member Gempala',
-    nickname: 'Member 04',
-    role: 'Anggota',
-    division: 'Creative & Media',
-    joined: 2022,
-    status: 'ACTIVE',
-    bio: 'Mendokumentasikan cerita, energi, dan karya Gempala.'
-  }
-];
+export { memberDataset as members } from './members';
+export { getMemberByCode, getMemberPhotoUrl } from './members';
+
+export const memberPlaceholders = {
+  fallbackMemberImage: '/placeholder-member.svg'
+};
 
 export const activities = [
   { no: '024', title: 'Semarak HUT RI', date: '17.08.2026', location: 'Bojongireng', category: 'Community', accent: 'lime' },

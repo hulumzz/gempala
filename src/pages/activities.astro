@@ -2,4 +2,50 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { activities } from '../data/site';
 ---
-<BaseLayout title="Activities — Gempala"><section class="page-hero shell"><div class="section-kicker eyebrow">FIELD NOTES / ACTIVITIES</div><h1 class="display xl">WE<br/>SHOW UP.</h1><p class="lead">Kegiatan sosial, budaya, perayaan, olahraga, dan ruang kebersamaan. Yang penting bukan terlihat sibuk, tapi benar-benar hadir.</p></section><section class="section activity-board"><div class="shell"><div class="filters"><button class="label lime">ALL</button><button class="label">SOCIAL</button><button class="label">CULTURE</button><button class="label">COMMUNITY</button></div><div class="entries">{activities.map((a,index)=><article class="entry"><div class:list={['entry-photo',`tone-${a.accent}`]}><span>PHOTO ARCHIVE / {a.no}</span></div><div class="entry-info"><div><span class="eyebrow">ACTIVITY / {a.no}</span><span class="label">{a.category}</span></div><h2>{a.title}</h2><p>{a.date} — {a.location}</p><span class="arrow">↗</span></div></article>)}</div></div></section><style>.activity-board{background:var(--purple);border-top:var(--line)}.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px}.filters button{cursor:pointer}.entries{display:grid;gap:35px}.entry{display:grid;grid-template-columns:1.25fr .75fr;border:var(--line);box-shadow:var(--shadow);background:var(--white);border-radius:var(--radius);overflow:hidden}.entry:nth-child(even){grid-template-columns:.75fr 1.25fr}.entry:nth-child(even) .entry-photo{order:2;border-right:0;border-left:var(--line)}.entry-photo{min-height:430px;border-right:var(--line);display:grid;place-items:center;background:var(--lime)}.tone-blue{background:var(--blue)}.tone-orange{background:var(--orange)}.entry-photo span{border:var(--line);background:var(--paper);padding:8px;font:800 10px Archivo;transform:rotate(-3deg)}.entry-info{padding:28px;display:flex;flex-direction:column}.entry-info>div{display:flex;justify-content:space-between}.entry-info h2{font:900 clamp(40px,5vw,70px)/.92 Archivo;letter-spacing:-.055em;margin:auto 0 12px}.entry-info p{font-size:12px;font-weight:700}.entry-info .arrow{align-self:flex-end;margin-top:auto}@media(max-width:800px){.entry,.entry:nth-child(even){grid-template-columns:1fr}.entry:nth-child(even) .entry-photo{order:0;border-left:0}.entry-photo{min-height:300px;border-right:0;border-bottom:var(--line)}.entry-info{min-height:300px}}</style></BaseLayout>
+<BaseLayout title="Activities — Gempala">
+  <section class="page-hero shell">
+    <div class="section-kicker eyebrow">FIELD NOTES / ACTIVITIES</div>
+    <h1 class="display xl">WE<br/>SHOW UP.</h1>
+    <p class="lead">Kegiatan sosial, budaya, perayaan, olahraga, dan ruang kebersamaan. Yang penting bukan terlihat sibuk, tapi benar-benar hadir.</p>
+  </section>
+  <section class="section activity-board">
+    <div class="shell">
+      <div class="filters" aria-label="Filter kegiatan">
+        <button class="label lime is-active" type="button" data-filter="ALL" aria-pressed="true">ALL</button>
+        <button class="label" type="button" data-filter="SOCIAL" aria-pressed="false">SOCIAL</button>
+        <button class="label" type="button" data-filter="CULTURE" aria-pressed="false">CULTURE</button>
+        <button class="label" type="button" data-filter="COMMUNITY" aria-pressed="false">COMMUNITY</button>
+      </div>
+      <p class="filter-status eyebrow" aria-live="polite">SHOWING ALL ACTIVITIES</p>
+      <div class="entries">
+        {activities.map((activity) => <article class="entry" data-category={activity.category.toUpperCase()}>
+          <div class:list={['entry-photo', `tone-${activity.accent}`]}><span>PHOTO ARCHIVE / {activity.no}</span></div>
+          <div class="entry-info"><div><span class="eyebrow">ACTIVITY / {activity.no}</span><span class="label">{activity.category}</span></div><h2>{activity.title}</h2><p>{activity.date} — {activity.location}</p><span class="arrow" aria-hidden="true">↗</span></div>
+        </article>)}
+      </div>
+    </div>
+  </section>
+  <script is:inline>
+    const filters = [...document.querySelectorAll('[data-filter]')];
+    const entries = [...document.querySelectorAll('.entry')];
+    const status = document.querySelector('.filter-status');
+    filters.forEach((button) => button.addEventListener('click', () => {
+      const filter = button.dataset.filter;
+      let count = 0;
+      filters.forEach((item) => {
+        const active = item === button;
+        item.classList.toggle('is-active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+      entries.forEach((entry) => {
+        const show = filter === 'ALL' || entry.dataset.category === filter;
+        entry.hidden = !show;
+        if (show) count++;
+      });
+      if (status) status.textContent = filter === 'ALL' ? `SHOWING ALL ${count} ACTIVITIES` : `SHOWING ${count} ${filter} ACTIVITIES`;
+    }));
+  </script>
+  <style>
+    .activity-board{background:var(--purple);border-top:var(--line)}.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}.filters button{cursor:pointer;transition:transform .14s,background .14s}.filters button:hover{transform:translateY(-2px)}.filters .is-active{background:var(--lime);box-shadow:3px 3px 0 var(--ink)}.filter-status{margin:0 0 36px;color:var(--paper)}.entries{display:grid;gap:35px}.entry{display:grid;grid-template-columns:1.25fr .75fr;border:var(--line);box-shadow:var(--shadow);background:var(--white);border-radius:var(--radius);overflow:hidden}.entry:nth-child(even){grid-template-columns:.75fr 1.25fr}.entry:nth-child(even) .entry-photo{order:2;border-right:0;border-left:var(--line)}.entry-photo{min-height:430px;border-right:var(--line);display:grid;place-items:center;background:var(--lime)}.tone-blue{background:var(--blue)}.tone-orange{background:var(--orange)}.entry-photo span{border:var(--line);background:var(--paper);padding:8px;font:800 10px Archivo;transform:rotate(-3deg)}.entry-info{padding:28px;display:flex;flex-direction:column}.entry-info>div{display:flex;justify-content:space-between}.entry-info h2{font:900 clamp(40px,5vw,70px)/.92 Archivo;letter-spacing:-.055em;margin:auto 0 12px}.entry-info p{font-size:12px;font-weight:700}.entry-info .arrow{align-self:flex-end;margin-top:auto}@media(max-width:800px){.entry,.entry:nth-child(even){grid-template-columns:1fr}.entry:nth-child(even) .entry-photo{order:0;border-left:0}.entry-photo{min-height:300px;border-right:0;border-bottom:var(--line)}.entry-info{min-height:300px}}
+  </style>
+</BaseLayout>
