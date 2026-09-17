@@ -5,6 +5,7 @@ const {
   description = 'Gempala adalah organisasi kepemudaan Bojongireng. Ruang tumbuh, karya, sosial, dan kebersamaan sejak 2021.'
 } = Astro.props;
 const path = Astro.url.pathname;
+const canonical = new URL(path, Astro.site ?? Astro.url.origin);
 ---
 <!doctype html>
 <html lang="id">
@@ -13,12 +14,20 @@ const path = Astro.url.pathname;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#f3efdf" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content="Gempala" />
+    <meta property="og:locale" content="id_ID" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <title>{title}</title>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header shell">
       <a class="brand" href="/" aria-label="Gempala home"><span class="brand-dot"></span>GEMPALA<sup>®</sup></a>
       <nav class="desktop-nav" aria-label="Navigasi utama">
@@ -42,7 +51,7 @@ const path = Astro.url.pathname;
       </div>
     </div>
 
-    <main><slot /></main>
+    <main id="main-content"><slot /></main>
 
     <footer class="site-footer">
       <div class="shell footer-top">
@@ -53,6 +62,9 @@ const path = Astro.url.pathname;
       <div class="shell footer-bottom"><span>EST. 2021</span><span>BUILT BY YOUNG PEOPLE, FOR OUR COMMUNITY.</span><span>© 2026</span></div>
     </footer>
 
+    <style is:global>
+      .skip-link{position:fixed;left:14px;top:12px;z-index:999;background:var(--lime);color:var(--ink);border:2px solid var(--ink);padding:9px 12px;font:800 11px Archivo;transform:translateY(-160%);transition:transform .15s ease}.skip-link:focus{transform:translateY(0)}:focus-visible{outline:3px solid var(--purple);outline-offset:4px}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
+    </style>
     <script is:inline>
       const btn = document.querySelector('.menu-button');
       const menu = document.querySelector('#mobile-menu');

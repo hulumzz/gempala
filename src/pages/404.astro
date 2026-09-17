@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="404 — Gempala" description="Halaman Gempala tidak ditemukan.">
+  <section class="not-found shell">
+    <span class="label orange">404 / LOST PAGE</span>
+    <h1 class="display xl">WRONG<br/>TURN.</h1>
+    <p class="lead">Halaman yang kamu cari tidak ada, sudah dipindah, atau mungkin memang belum pernah dibuat.</p>
+    <a class="brutal-button" href="/">Back to Gempala ↗</a>
+    <div class="scribble">NOT HERE →</div>
+  </section>
+  <style>
+    .not-found{min-height:calc(100vh - 92px);padding:80px 0 120px;position:relative}.not-found h1{margin:30px 0}.not-found .lead{margin-bottom:34px}.scribble{position:absolute;right:8%;top:30%;font:900 18px Archivo;transform:rotate(10deg);background:var(--blue);border:var(--line);padding:10px;box-shadow:3px 3px var(--ink)}@media(max-width:800px){.not-found{padding-top:55px}.scribble{position:static;display:inline-block;margin:55px 0 0 45%;}}
+  </style>
+</BaseLayout>
