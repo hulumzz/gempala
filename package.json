@@ -7,14 +7,20 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "pages:types": "wrangler types ./functions/types.d.ts",
+    "pages:dev": "npm run build && wrangler pages dev dist",
+    "pages:deploy": "npm run build && wrangler pages deploy dist --project-name=gempala",
+    "pages:deploy:preview": "npm run build && wrangler pages deploy dist --project-name=gempala --branch=preview"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
     "astro": "^7.3.3"
   },
   "devDependencies": {
+    "@types/node": "^22.20.3",
     "typescript": "^5.9.2",
-    "vitest": "^2.1.8"
+    "vitest": "^2.1.8",
+    "wrangler": "^4.133.0"
   }
 }
