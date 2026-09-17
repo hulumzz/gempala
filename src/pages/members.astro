@@ -1,5 +1,106 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { members } from '../data/site';
+import { members, getMemberPhotoUrl } from '../data/site';
 ---
-<BaseLayout title="Members — Gempala"><section class="page-hero shell"><div class="section-kicker eyebrow">MEMBER DIRECTORY / VERIFIED</div><h1 class="display xl">THE<br/>PEOPLE.</h1><p class="lead">Cari nama atau Member ID. Setiap profil memiliki halaman identitas digital yang bisa dibuka langsung dari QR pada member card Gempala.</p></section><section class="section directory"><div class="shell"><div class="search-wrap"><input id="member-search" class="input-brutal" type="search" placeholder="Search member / GMP-026-xxx..." autocomplete="off"/><span>⌕</span></div><div class="member-grid" id="member-grid">{members.map((m,index)=><a class="member-card card" href={`/m/${m.code}`} data-search={`${m.name} ${m.nickname} ${m.code} ${m.role}`.toLowerCase()}><div class:list={['member-photo',index%3===1&&'alt',index%3===2&&'third']}><span>{m.nickname.slice(0,1)}</span><b>PORTRAIT / {String(index+1).padStart(2,'0')}</b></div><div class="member-info"><div><span class="eyebrow">{m.code}</span><span class:list={['status',m.status==='ACTIVE'&&'active']}>● {m.status}</span></div><h2>{m.name}</h2><p>{m.role} / {m.division}</p><span class="open">VIEW ID ↗</span></div></a>)}</div><div id="member-empty" class="empty-state" hidden><strong>NO MEMBER FOUND.</strong><p>Coba nama atau Member ID yang lain.</p></div></div></section><script is:inline>const input=document.querySelector('#member-search');const cards=[...document.querySelectorAll('.member-card')];const empty=document.querySelector('#member-empty');input?.addEventListener('input',(e)=>{const q=e.target.value.toLowerCase().trim();let shown=0;cards.forEach(card=>{const ok=card.dataset.search.includes(q);card.hidden=!ok;if(ok)shown++});if(empty)empty.hidden=shown!==0});</script><style>.directory{background:var(--purple);border-top:var(--line)}.search-wrap{position:relative;max-width:760px;margin:0 auto 50px}.search-wrap span{position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:28px;font-weight:900}.member-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}.member-card{transition:.16s}.member-card:hover{transform:translate(-3px,-5px);box-shadow:9px 11px var(--ink)}.member-photo{min-height:330px;background:var(--lime);border-bottom:var(--line);position:relative;display:grid;place-items:center}.member-photo.alt{background:var(--blue)}.member-photo.third{background:var(--orange)}.member-photo>span{font:900 100px Archivo;opacity:.15}.member-photo b{position:absolute;bottom:16px;left:16px;background:var(--paper);border:var(--line);padding:7px;font:800 9px Archivo;transform:rotate(-2deg)}.member-info{padding:19px}.member-info>div{display:flex;justify-content:space-between}.status{font:800 9px Archivo}.status.active{color:#277800}.member-info h2{font:900 27px/1 Archivo;margin:18px 0 8px;letter-spacing:-.04em}.member-info p{font-size:11px;min-height:28px}.open{font:900 10px Archivo;display:block;margin-top:20px}.empty-state{max-width:650px;margin:auto}.empty-state strong{font:900 30px Archivo}@media(max-width:850px){.member-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.member-grid{grid-template-columns:1fr}.member-photo{min-height:300px}}</style></BaseLayout>
+<BaseLayout title="Members — Gempala">
+  <section class="page-hero shell">
+    <div class="section-kicker eyebrow">MEMBER DIRECTORY / VERIFIED</div>
+    <h1 class="display xl">THE<br/>PEOPLE.</h1>
+    <p class="lead">Cari nama atau Member ID. Setiap member yang sudah memiliki identitas resmi bisa dibuka langsung lewat QR member card Gempala.</p>
+  </section>
+
+  <section class="section directory">
+    <div class="shell">
+      <div class="search-wrap">
+        <input id="member-search" class="input-brutal" type="search" placeholder="Search member / GMP-026-xxx..." autocomplete="off" />
+        <span aria-hidden="true">⌕</span>
+      </div>
+
+      <div class="member-grid" id="member-grid">
+        {members.map((m, index) => {
+          const identified = Boolean(m.code && m.name);
+          const photoUrl = getMemberPhotoUrl(m);
+          const searchValue = `${m.name} ${m.nickname} ${m.code} ${m.role}`.toLowerCase();
+          const tone = `tone-${index % 4}`;
+
+          return identified ? (
+            <a class="member-card card" href={`/m/${m.code}`} data-search={searchValue}>
+              <div class:list={['member-photo', tone]}>
+                <img src={photoUrl} alt={`Foto ${m.name}`} loading="lazy" width="300" height="400" />
+                <b>PORTRAIT / {String(index + 1).padStart(2, '0')}</b>
+              </div>
+              <div class="member-info">
+                <div class="member-meta"><span class="eyebrow">{m.code}</span><span class:list={['status', m.status === 'ACTIVE' && 'active']}>● {m.status}</span></div>
+                <h2>{m.name}</h2>
+                <p>{m.role} / {m.division}</p>
+                <span class="open">VIEW ID ↗</span>
+              </div>
+            </a>
+          ) : (
+            <article class="member-card card pending-card" data-search="member pending">
+              <div class:list={['member-photo', tone]}>
+                <img src={photoUrl} alt="Foto member Gempala" loading="lazy" width="300" height="400" />
+                <b>PORTRAIT / {String(index + 1).padStart(2, '0')}</b>
+              </div>
+              <div class="member-info pending-info">
+                <div class="member-meta"><span class="eyebrow blank-field" aria-hidden="true">&nbsp;</span><span class="pending-badge">DATA PENDING</span></div>
+                <h2 class="blank-name" aria-label="Nama belum tersedia">&nbsp;</h2>
+                <p class="blank-detail" aria-label="Identitas belum tersedia">&nbsp;</p>
+                <span class="open muted">IDENTITY NOT PUBLISHED</span>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <div id="member-empty" class="empty-state" hidden>
+        <strong>NO MEMBER FOUND.</strong>
+        <p>Coba nama atau Member ID yang lain.</p>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    const input = document.querySelector('#member-search');
+    const cards = [...document.querySelectorAll('.member-card')];
+    const empty = document.querySelector('#member-empty');
+    input?.addEventListener('input', (event) => {
+      const query = event.target.value.toLowerCase().trim();
+      let shown = 0;
+      cards.forEach((card) => {
+        const ok = card.dataset.search.includes(query);
+        card.hidden = !ok;
+        if (ok) shown++;
+      });
+      if (empty) empty.hidden = shown !== 0;
+    });
+  </script>
+
+  <style>
+    .directory{background:var(--purple);border-top:var(--line)}
+    .search-wrap{position:relative;max-width:760px;margin:0 auto 50px}
+    .search-wrap span{position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:28px;font-weight:900;pointer-events:none}
+    .member-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px;align-items:start}
+    .member-card{overflow:hidden;transition:transform .16s ease,box-shadow .16s ease;background:var(--paper);min-width:0}
+    a.member-card:hover{transform:translate(-3px,-5px);box-shadow:9px 11px var(--ink)}
+    .member-photo{aspect-ratio:3/4;border-bottom:var(--line);position:relative;overflow:hidden;isolation:isolate;background:var(--lime)}
+    .member-photo:after{content:"";position:absolute;inset:auto -20% -12% -20%;height:42%;background:rgba(20,20,20,.08);transform:rotate(-8deg);z-index:-1}
+    .member-photo.tone-1{background:var(--blue)}
+    .member-photo.tone-2{background:var(--orange)}
+    .member-photo.tone-3{background:var(--paper)}
+    .member-photo img{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;position:relative;z-index:1}
+    .member-photo b{position:absolute;z-index:2;bottom:14px;left:14px;background:var(--paper);border:var(--line);padding:7px 9px;font:800 9px Archivo;transform:rotate(-2deg);box-shadow:3px 3px var(--ink)}
+    .member-info{padding:19px;min-height:175px;display:flex;flex-direction:column}
+    .member-meta{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .status{font:800 9px Archivo;white-space:nowrap}.status.active{color:#277800}
+    .member-info h2{font:900 clamp(23px,2.5vw,31px)/1 Archivo;margin:18px 0 8px;letter-spacing:-.04em;overflow-wrap:anywhere}
+    .member-info p{font-size:11px;min-height:28px;margin:0}
+    .open{font:900 10px Archivo;display:block;margin-top:auto;padding-top:20px}.open.muted{opacity:.55}
+    .pending-card{cursor:default}.pending-info{background:var(--white)}
+    .pending-badge{font:900 9px Archivo;background:var(--lime);border:2px solid var(--ink);padding:5px 7px;transform:rotate(1deg)}
+    .blank-name,.blank-detail{visibility:hidden}.blank-name{min-height:31px}
+    .empty-state{max-width:650px;margin:auto}.empty-state strong{font:900 30px Archivo}
+    @media(max-width:900px){.member-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:560px){.member-grid{grid-template-columns:1fr;gap:22px}.member-card{max-width:390px;width:100%;margin-inline:auto}.member-info{min-height:165px}}
+  </style>
+</BaseLayout>
