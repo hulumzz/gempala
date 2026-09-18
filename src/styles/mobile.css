@@ -1,1 +1,121 @@
-@media(max-width:640px){:root{--shell:min(100% - 28px,1180px);--shadow:4px 4px 0 var(--ink)}body{font-size:15px}.site-header{height:68px}.brand{font-size:21px;gap:5px}.brand-mark{width:29px;height:29px}.brand sup{font-size:7px}.menu-button{min-height:40px;padding:8px 10px;font-size:10px}.mobile-menu{padding-top:76px}.mobile-menu a{font-size:clamp(31px,10vw,48px);padding:11px 0}.section{padding:54px 0}.section-tight{padding:44px 0}.page-hero{padding:42px 0 52px}.display.xl{font-size:clamp(58px,17vw,76px)}.display.lg{font-size:clamp(46px,14vw,64px)}.display.md{font-size:clamp(38px,11vw,52px)}.lead{font-size:17px;line-height:1.42}.copy{font-size:14px;line-height:1.65}.label{min-height:28px;padding:5px 9px;font-size:9px}.hero{gap:26px!important;padding:24px 0 52px!important}.hero-meta{align-items:flex-start;flex-direction:column;gap:10px;margin-bottom:18px!important}.hero-bottom{gap:22px;margin-top:27px!important}.hero-bottom .brutal-button{width:100%;justify-content:center;text-align:center}.hero-collage{min-height:330px!important}.photo-a{inset:8px 45px 98px 0!important}.photo-b{inset:120px 0 2px 56px!important}.photo-note{right:0!important;top:10px!important;padding:9px!important;font-size:8px!important}.about-copy{padding-top:8px!important}.about-copy .lead{margin-top:27px!important}.activity-grid{margin-top:32px!important}.activity-card.featured .media-placeholder,.media-placeholder{min-height:250px!important}.activity-body{padding:16px!important}.member-callout{gap:36px!important}.member-stack{min-height:354px!important;padding-top:18px!important}.mini-member{width:100%!important;padding:13px!important;grid-template-columns:52px 1fr auto!important;gap:11px!important;transform:rotate(var(--r))!important}.avatar-faux{width:52px!important;height:52px!important;font-size:24px!important}.mini-member strong{font-size:19px!important}.mini-member small{font-size:10px!important}.verified-stamp{width:76px!important;height:76px!important;right:-2px!important;bottom:-4px!important;font-size:8px!important}.story-grid{margin-top:30px!important}.story-card{min-height:250px!important;padding:19px!important}.story-card h3{font-size:25px!important}.entry-photo{min-height:240px!important}.entry-info{min-height:255px!important;padding:20px!important}.entry-info h2{font-size:clamp(34px,11vw,48px)!important}.filter-status{margin-bottom:26px!important}.crew-card,.member-card{box-shadow:var(--shadow)!important}.leader .portrait,.portrait,.member-photo{min-height:260px!important}.value-grid article{min-height:185px!important;padding:22px!important}.value-grid h3{font-size:43px!important}.win{gap:14px!important;padding:28px 0!important}.win h2{font-size:clamp(31px,10vw,45px)!important}.story-cover{min-height:230px!important}.story-copy{min-height:280px!important;padding:21px!important}.story-copy h2{font-size:clamp(30px,9vw,42px)!important;margin:31px 0 14px!important}.member-page{padding:24px 0 58px!important}.profile{gap:32px!important;padding-top:31px!important}.portrait-panel{min-height:280px!important}.identity-data{padding:18px!important}.identity-data h1{font-size:clamp(34px,11vw,46px)!important}.profile-info h2{font-size:clamp(48px,15vw,70px)!important}.profile-info dl div{grid-template-columns:100px 1fr!important}.footer-rail{min-height:30px;gap:10px;font-size:8px;letter-spacing:.1em}.footer-top{gap:30px;padding:32px 0 26px}.footer-intro h2{font-size:clamp(37px,12vw,53px)}.footer-nav{gap:18px}.footer-nav a{font-size:13px;min-height:35px}.footer-signoff{gap:10px;padding-top:15px}.footer-stamp{width:35px;height:35px}.footer-word{font-size:clamp(54px,16.5vw,72px);letter-spacing:-.09em}.footer-bottom{font-size:8px;gap:10px 15px;margin-top:17px;padding:15px 0 18px}}
+/* Shared small-screen rules. Page composition stays with its Astro page. */
+@media (max-width: 640px) {
+  :root {
+    --shell: min(100% - 32px, 1180px);
+    --shadow: 4px 4px 0 var(--ink);
+  }
+
+  body {
+    font-size: 15px;
+  }
+  .site-header {
+    height: 68px;
+  }
+  .brand {
+    font-size: 21px;
+    gap: 5px;
+  }
+  .brand-mark {
+    width: 29px;
+    height: 29px;
+  }
+  .brand sup {
+    font-size: 7px;
+  }
+  .menu-button {
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+  .mobile-menu {
+    padding-top: 80px;
+  }
+  .mobile-menu a {
+    font-size: clamp(31px, 10vw, 48px);
+    padding: 12px 0;
+  }
+
+  .section {
+    padding: 56px 0;
+  }
+  .section-tight {
+    padding: 44px 0;
+  }
+  .page-hero {
+    padding: 28px 0 48px;
+  }
+  .display.xl {
+    font-size: clamp(46px, 13.5vw, 86px);
+  }
+  .display.lg {
+    font-size: clamp(42px, 12.5vw, 72px);
+  }
+  .display.md {
+    font-size: clamp(34px, 10vw, 56px);
+  }
+  .lead {
+    font-size: 17px;
+    line-height: 1.5;
+  }
+  .copy {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .label {
+    min-height: 28px;
+    padding: 5px 9px;
+    font-size: 9px;
+  }
+  .archive-row {
+    grid-template-columns: 48px minmax(0, 1fr) 24px;
+    gap: 12px;
+  }
+  .archive-row strong {
+    font-size: clamp(23px, 6vw, 34px);
+    line-height: 1.1;
+  }
+
+  .footer-rail {
+    min-height: 32px;
+    gap: 10px;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+  }
+  .footer-top {
+    gap: 30px;
+    padding: 36px 0 28px;
+  }
+  .footer-intro h2 {
+    font-size: clamp(34px, 10vw, 53px);
+    line-height: 0.95;
+  }
+  .footer-nav {
+    gap: 20px;
+  }
+  .footer-nav a {
+    font-size: 13px;
+    min-height: 44px;
+  }
+  .footer-signoff {
+    gap: 10px;
+    padding-top: 18px;
+  }
+  .footer-stamp {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 auto;
+  }
+  .footer-word {
+    font-size: clamp(44px, 14.5vw, 88px);
+    letter-spacing: -0.09em;
+  }
+  .footer-bottom {
+    font-size: 8px;
+    gap: 12px 15px;
+    margin-top: 20px;
+    padding: 18px 0 22px;
+  }
+  .empty-state {
+    padding: 28px 18px;
+  }
+}

@@ -20,23 +20,6 @@ const uploadedMemberPhotos = new Set([
 
 export const memberTones = ['purple', 'sky', 'lime', 'orange', 'pink', 'cream'] as const;
 
-// Some supplied portraits are intentionally kept byte-for-byte as uploaded but
-// have a pure-black matte baked into the file instead of alpha transparency.
-// The UI keys only that near-black matte at render time (via the SVG filter in
-// MemberFilterDefs) so the repository still stores the untouched originals.
-const blackBackgroundMemberPhotos = new Set([
-  'ulum.webp',
-  'vina.webp',
-  'izur.webp',
-  'huda.webp',
-  'sulton.webp',
-  'khafid.webp',
-  'amelia.webp',
-  'ulin.webp',
-  'ujwala.webp',
-  'indri.webp'
-]);
-
 // Photo-only records from the supplied archive. Identity data is intentionally
 // blank until Gempala assigns official profile data in the main member dataset.
 export const photoOnlyMembers: Member[] = [
@@ -71,8 +54,5 @@ export const getUploadedMemberPhotoUrl = (member: Member | null | undefined) => 
   if (!hasUploadedMemberPhoto(member)) return '/placeholder-member.svg';
   return `/members/${member!.photo}`;
 };
-
-export const hasBlackBackgroundMemberPhoto = (member: Member | null | undefined) =>
-  Boolean(member?.photo && blackBackgroundMemberPhotos.has(member.photo));
 
 export const getMemberTone = (index: number) => memberTones[index % memberTones.length];

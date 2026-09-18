@@ -1,0 +1,12 @@
+---
+import MemberProfile from '../../components/MemberProfile.astro';
+import { memberDataset } from '../../data/members';
+
+// Emit actual member pages so QR links work in Astro dev and on static hosts.
+export function getStaticPaths() {
+  return memberDataset
+    .filter((member) => member.code && member.name)
+    .map((member) => ({ params: { code: member.code } }));
+}
+---
+<MemberProfile />

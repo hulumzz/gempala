@@ -7,6 +7,8 @@ export type Member = {
   joined: number;
   status: 'ACTIVE' | 'ALUMNI';
   bio: string;
+  birthDate?: string;
+  quote?: string;
   instagram?: string;
   photo?: string;
 };
@@ -14,6 +16,8 @@ export type Member = {
 export const memberDataset: Member[] = [
   {
     code: 'GMP-026-001',
+    birthDate: '2001-04-02',
+    quote: 'Organisasi tumbuh ketika tanggung jawab dijalankan bersama.',
     name: 'Muhamad Khoirul Ulum',
     nickname: 'Ulum',
     role: 'Ketua',
@@ -26,6 +30,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-002',
+    birthDate: '2006-12-26',
+    quote: 'Karya yang baik lahir dari kemauan untuk terus belajar.',
     name: 'Vina Ida Matusilmi',
     nickname: 'Vina',
     role: 'Anggota',
@@ -37,6 +43,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-003',
+    birthDate: '2011-11-26',
+    quote: 'Langkah kecil menjadi berarti ketika dilakukan dengan tulus.',
     name: 'M. Aji Irwan Sah',
     nickname: 'Aji',
     role: 'Anggota',
@@ -48,6 +56,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-004',
+    birthDate: '2010-04-30',
+    quote: 'Kebersamaan dimulai dari kesediaan untuk saling mendengarkan.',
     name: 'M. Ulin Nuha',
     nickname: 'Ulin',
     role: 'Anggota',
@@ -59,6 +69,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-005',
+    birthDate: '2011-02-20',
+    quote: 'Berani mencoba adalah langkah pertama menuju karya yang baik.',
     name: 'Muhammad Khafid Mubarok',
     nickname: 'Khafid',
     role: 'Anggota',
@@ -70,6 +82,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-006',
+    birthDate: '2004-12-03',
+    quote: 'Kebaikan sederhana dapat membawa perubahan bagi sekitar.',
     name: 'Muhamad Fahrizal Abib',
     nickname: 'Fahrizal',
     role: 'Anggota',
@@ -81,6 +95,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-007',
+    birthDate: '2004-08-10',
+    quote: 'Menolong orang lain juga mengajarkan kita untuk tumbuh.',
     name: 'Uswatun',
     nickname: 'Uswatun',
     role: 'Anggota',
@@ -92,6 +108,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-008',
+    birthDate: '2005-12-17',
+    quote: 'Setiap gagasan layak diberi kesempatan untuk berkembang.',
     name: 'Zahra Alivia',
     nickname: 'Zahra',
     role: 'Anggota',
@@ -103,6 +121,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-009',
+    birthDate: '2005-06-09',
+    quote: 'Persahabatan terjaga melalui perhatian dan kejujuran.',
     name: 'Nurul Nisa',
     nickname: 'Nisa',
     role: 'Anggota',
@@ -114,6 +134,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-010',
+    birthDate: '2011-05-02',
+    quote: 'Kesabaran membuat langkah kita lebih kuat dan terarah.',
     name: 'Sifatul Khasanah',
     nickname: 'Sifatul',
     role: 'Anggota',
@@ -125,6 +147,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-011',
+    birthDate: '2012-01-23',
+    quote: 'Mimpi menjadi nyata ketika kita mulai bertindak.',
     name: 'Revans Permana',
     nickname: 'Revans',
     role: 'Anggota',
@@ -136,6 +160,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-012',
+    birthDate: '2012-04-17',
+    quote: 'Keberanian tumbuh saat kita tetap melangkah meski ragu.',
     name: 'Agung Fahreza',
     nickname: 'Agung',
     role: 'Anggota',
@@ -147,6 +173,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-013',
+    birthDate: '2005-03-21',
+    quote: 'Kepercayaan dibangun dari janji yang ditepati.',
     name: 'M Adi Setiawan',
     nickname: 'Adi',
     role: 'Anggota',
@@ -158,6 +186,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-014',
+    birthDate: '2013-02-22',
+    quote: 'Peduli berarti hadir ketika orang lain membutuhkan.',
     name: 'Kukuh Bayu Pamungkas',
     nickname: 'Kukuh',
     role: 'Anggota',
@@ -169,6 +199,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-015',
+    birthDate: '2005-10-25',
+    quote: 'Perbedaan menjadi kekuatan saat kita saling menghargai.',
     name: 'Sutanto',
     nickname: 'Sutanto',
     role: 'Anggota',
@@ -180,6 +212,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-016',
+    birthDate: '2010-09-23',
+    quote: 'Usaha hari ini adalah bekal untuk kesempatan esok.',
     name: 'M Alif Fadilah',
     nickname: 'Alif',
     role: 'Anggota',
@@ -191,6 +225,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-017',
+    birthDate: '2010-03-07',
+    quote: 'Kreativitas tumbuh ketika rasa ingin tahu tetap dijaga.',
     name: 'Ujwala Nimpuna',
     nickname: 'Ujwala',
     role: 'Anggota',
@@ -202,6 +238,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-018',
+    birthDate: '2007-07-05',
+    quote: 'Tidak perlu sempurna untuk mulai memberi manfaat.',
     name: 'Amelia Zukhrofah',
     nickname: 'Amelia',
     role: 'Anggota',
@@ -213,6 +251,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-019',
+    birthDate: '2004-04-01',
+    quote: 'Waktu menjadi berharga ketika diisi dengan tindakan yang baik.',
     name: 'Sulton Rozaqi',
     nickname: 'Sulton',
     role: 'Anggota',
@@ -224,6 +264,8 @@ export const memberDataset: Member[] = [
   },
   {
     code: 'GMP-026-020',
+    birthDate: '2005-10-09',
+    quote: 'Keberhasilan bersama dimulai dari kemauan untuk bekerja sama.',
     name: 'Indri Sagita',
     nickname: 'Indri',
     role: 'Anggota',

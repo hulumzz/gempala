@@ -4,8 +4,163 @@ import { stories } from '../data/site';
 ---
 <BaseLayout title="Stories — Gempala">
   <section class="page-hero shell"><div class="section-kicker eyebrow">NOT NEWSROOM. OUR JOURNAL.</div><h1 class="display xl">STORIES<br/>WE KEEP.</h1><p class="lead">Catatan kegiatan, orang, dan momen yang layak disimpan lebih lama dari satu Instagram Story.</p></section>
-  <section class="section stories"><div class="shell story-list">{stories.map((story,index)=><article class="story"><div class:list={['story-cover',index===1&&'blue',index===2&&'orange']}><span>STORY / {String(index+1).padStart(2,'0')}</span></div><div class="story-copy"><div><span class="eyebrow">{story.date}</span><span class="label">{story.tag}</span></div><h2>{story.title}</h2><p>Arsip cerita Gempala. Konten lengkap dapat ditambahkan dari data statis atau database ketika modul editorial diaktifkan.</p><span class="story-unavailable">FULL STORY / SOON</span></div></article>)}</div></section>
+  <section class="section stories"><div class="shell story-list">{stories.map((story,index)=><article class="story"><div class:list={['story-cover',index===1&&'blue',index===2&&'orange']}><b class="story-number" aria-hidden="true">{String(index+1).padStart(2,'0')}</b><span>GEMPALA / {story.tag}</span></div><div class="story-copy"><div><span class="eyebrow">{story.date}</span><span class="label">{story.tag}</span></div><h2>{story.title}</h2><p>Cerita lengkap sedang disiapkan. Sambil menunggu, lihat dokumentasi kegiatan dan momen kebersamaan Gempala.</p><div class="story-end"><a class="brutal-button" href="/activities">Lihat kegiatan ↗</a><span class="story-unavailable">CERITA / SEGERA</span></div></div></article>)}</div></section>
   <style>
-    .stories{background:var(--blue);border-top:var(--line)}.story-list{display:grid;gap:28px}.story{display:grid;grid-template-columns:.8fr 1.2fr;border:var(--line);box-shadow:var(--shadow);border-radius:var(--radius);overflow:hidden;background:var(--white)}.story-cover{min-height:360px;background:var(--lime);border-right:var(--line);display:grid;place-items:center}.story-cover.blue{background:var(--purple)}.story-cover.orange{background:var(--orange)}.story-cover span{padding:8px;background:var(--paper);border:var(--line);font:800 9px Archivo;transform:rotate(-3deg)}.story-copy{padding:28px;display:flex;flex-direction:column}.story-copy>div{display:flex;justify-content:space-between}.story-copy h2{font:900 clamp(34px,5vw,63px)/.98 Archivo;letter-spacing:-.05em;margin:45px 0 18px}.story-copy p{font-size:13px;line-height:1.7;max-width:600px}.story-unavailable{font:900 10px Archivo;letter-spacing:.08em;margin-top:auto;align-self:flex-end;color:#555;border-bottom:2px solid #999;padding-bottom:6px}@media(max-width:800px){.story{grid-template-columns:1fr}.story-cover{min-height:270px;border-right:0;border-bottom:var(--line)}.story-copy{min-height:330px}}
+    .stories {
+      background: var(--blue);
+      border-top: var(--line);
+    }
+    .story-list {
+      display: grid;
+      gap: 28px;
+    }
+    .story {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      border: var(--line);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--white);
+    }
+    .story-cover {
+      min-height: 360px;
+      background: var(--lime);
+      border-right: var(--line);
+      display: grid;
+      place-items: center;
+    }
+    .story-cover.blue {
+      background: var(--purple);
+    }
+    .story-cover.orange {
+      background: var(--orange);
+    }
+    .story-cover span {
+      padding: 8px;
+      background: var(--paper);
+      border: var(--line);
+      font: 800 9px Archivo;
+      transform: rotate(-3deg);
+    }
+    .story-copy {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+    }
+    .story-copy > div {
+      display: flex;
+      justify-content: space-between;
+    }
+    .story-copy h2 {
+      font: 900 clamp(34px, 5vw, 63px)/0.98 Archivo;
+      letter-spacing: -0.05em;
+      margin: 45px 0 18px;
+    }
+    .story-copy p {
+      font-size: 13px;
+      line-height: 1.7;
+      max-width: 600px;
+    }
+    .story-unavailable {
+      font: 900 10px Archivo;
+      letter-spacing: 0.08em;
+      margin-top: auto;
+      align-self: flex-end;
+      color: #555;
+      border-bottom: 2px solid #999;
+      padding-bottom: 6px;
+    }
+    @media (max-width: 800px) {
+      .story {
+        grid-template-columns: 1fr;
+      }
+      .story-cover {
+        min-height: 270px;
+        border-right: 0;
+        border-bottom: var(--line);
+      }
+      .story-copy {
+        min-height: 330px;
+      }
+    }
+    .story {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    }
+    .story-cover {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      align-content: center;
+      gap: 18px;
+      background-image:
+        linear-gradient(rgb(20 20 20 / 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(20 20 20 / 0.1) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .story-cover::before {
+      content: "";
+      position: absolute;
+      width: 80%;
+      aspect-ratio: 1;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      z-index: -1;
+      opacity: 0.2;
+      right: -30%;
+      top: -25%;
+    }
+    .story-number {
+      font:
+        900 clamp(100px, 15vw, 220px)/0.8 Archivo,
+        sans-serif;
+      letter-spacing: -0.08em;
+      color: var(--paper);
+      -webkit-text-stroke: 2px var(--ink);
+      text-shadow: 5px 5px var(--ink);
+      transform: rotate(-7deg);
+    }
+    .story-cover span {
+      position: relative;
+    }
+    .story-copy > div {
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .story-copy h2 {
+      overflow-wrap: anywhere;
+      line-height: 1.05;
+    }
+    .story-copy .story-end {
+      margin-top: auto;
+      padding-top: 22px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .story-unavailable {
+      margin-top: 0;
+      align-self: center;
+      font-size: 9px;
+    }
+    @media (max-width: 800px) {
+      .story {
+        grid-template-columns: 1fr;
+      }
+      .story-cover {
+        min-height: 250px;
+      }
+      .story-number {
+        font-size: 140px;
+      }
+      .story-copy {
+        padding: 22px;
+        min-height: 300px;
+      }
+      .story-copy h2 {
+        font-size: clamp(30px, 7vw, 48px);
+        margin-top: 28px;
+      }
+    }
   </style>
 </BaseLayout>

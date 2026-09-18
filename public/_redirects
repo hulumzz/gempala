@@ -1,2 +1,3 @@
-# Member QR deep-link: /m/GMP-026-001 -> static member profile shell
-/m/* /m/index.html 200
+# Known member pages are generated at build time. Keep the shell for future IDs.
+/m/:code /m/ 200
+/m/:code/ /m/ 200

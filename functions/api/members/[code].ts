@@ -25,6 +25,8 @@ export const onRequestGet = async (context: { params: { code?: string }; env: En
         joined_year AS joined,
         status,
         bio,
+        birth_date::text AS "birthDate",
+        quote,
         instagram,
         photo_url AS photo
       FROM members
@@ -39,7 +41,11 @@ export const onRequestGet = async (context: { params: { code?: string }; env: En
       headers: { 'Cache-Control': 'public, max-age=60, s-maxage=300' }
     });
   } catch (error) {
-    console.error('member lookup failed', error);
+    const databaseError = error as { code?: string };
+    console.error('member lookup failed', { code: databaseError?.code || 'UNKNOWN' });
+    if (['42P01', '42703'].includes(databaseError?.code || '')) {
+      return Response.json({ error: 'Member database is not initialized', code: 'MEMBER_SCHEMA_MISSING' }, { status: 503 });
+    }
     return Response.json({ error: 'Unable to load member' }, { status: 500 });
   }
 };

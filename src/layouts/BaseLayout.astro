@@ -7,6 +7,7 @@ const {
   description = 'Gempala adalah organisasi kepemudaan Bojongireng. Ruang tumbuh, karya, sosial, dan kebersamaan sejak 2021.'
 } = Astro.props;
 const path = Astro.url.pathname;
+const socialImage = new URL('/gempala-social.png', Astro.site ?? Astro.url.origin);
 const canonical = new URL(path, Astro.site ?? Astro.url.origin);
 ---
 <!doctype html>
@@ -21,17 +22,30 @@ const canonical = new URL(path, Astro.site ?? Astro.url.origin);
     <meta property="og:description" content={description} />
     <meta property="og:site_name" content="Gempala" />
     <meta property="og:locale" content="id_ID" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Logo Gempala, organisasi kepemudaan Bojongireng" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="application-name" content="Gempala" />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/gempala-favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="/gempala-icon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/gempala-apple-touch.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <title>{title}</title>
   </head>
   <body>
-    <a class="skip-link" href="#main-content">Skip to content</a>
+    <a class="skip-link" href="#main-content">Langsung ke konten</a>
     <header class="site-header shell">
-      <a class="brand" href="/" aria-label="Beranda Gempala"><span class="brand-mark"><img src="/logo.png" width="500" height="500" alt="" /></span><span class="brand-name">GEMPALA</span><sup>®</sup></a>
+      <a class:list={['brand', {'brand-home': path === '/'}]} href="/" aria-label="Beranda Gempala"><span class="brand-mark"><img src="/logo.png" width="500" height="500" alt="" /></span><span class="brand-name">GEMPALA</span><sup>®</sup></a>
       <nav class="desktop-nav" aria-label="Navigasi utama">
         <a class:list={[{active: path.startsWith('/organization')}, 'nav-link']} href="/organization">Crew</a>
         <a class:list={[{active: path.startsWith('/activities')}, 'nav-link']} href="/activities">Activities</a>
@@ -41,7 +55,7 @@ const canonical = new URL(path, Astro.site ?? Astro.url.origin);
       <button class="menu-button brutal-button small" type="button" aria-expanded="false" aria-controls="mobile-menu">MENU +</button>
     </header>
 
-    <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav class="mobile-menu" id="mobile-menu" aria-label="Navigasi mobile" hidden>
       <div class="mobile-menu-inner shell">
         <div class="eyebrow">GEMPALA / NAV</div>
         <a href="/">Home <span>01</span></a>
@@ -51,9 +65,9 @@ const canonical = new URL(path, Astro.site ?? Astro.url.origin);
         <a href="/members">Members <span>05</span></a>
         <a href="/news">Stories <span>06</span></a>
       </div>
-    </div>
+    </nav>
 
-    <main id="main-content"><slot /></main>
+    <main id="main-content" tabindex="-1"><slot /></main>
 
     <footer class="site-footer">
       <div class="footer-rail" aria-hidden="true"><span>GEMPALA</span><i></i><span>BOJONGIRENG</span><i></i><span>EST. 2021</span></div>
@@ -71,19 +85,101 @@ const canonical = new URL(path, Astro.site ?? Astro.url.origin);
       <div class="shell footer-bottom"><span>EST. 2021</span><span>BUILT BY YOUNG PEOPLE, FOR OUR COMMUNITY.</span><span>© 2026</span></div>
     </footer>
 
-    <style is:global>
-      .skip-link{position:fixed;left:14px;top:12px;z-index:999;background:var(--lime);color:var(--ink);border:2px solid var(--ink);padding:9px 12px;font:800 11px Archivo;transform:translateY(-160%);transition:transform .15s ease}.skip-link:focus{transform:translateY(0)}:focus-visible{outline:3px solid var(--purple);outline-offset:4px}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
-    </style>
-    <script is:inline>
-      const btn = document.querySelector('.menu-button');
-      const menu = document.querySelector('#mobile-menu');
-      btn?.addEventListener('click', () => {
-        const open = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!open));
-        btn.textContent = open ? 'MENU +' : 'CLOSE ×';
-        if (menu) menu.hidden = open;
-        document.body.classList.toggle('menu-open', !open);
+  <style is:global>
+    .skip-link {
+      position: fixed;
+      left: 14px;
+      top: 12px;
+      z-index: 999;
+      background: var(--lime);
+      color: var(--ink);
+      border: 2px solid var(--ink);
+      padding: 9px 12px;
+      font: 800 11px Archivo;
+      transform: translateY(-160%);
+      transition: transform 0.15s ease;
+    }
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+    :focus-visible {
+      outline: 3px solid var(--purple);
+      outline-offset: 4px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+    <script>
+      const btn = document.querySelector<HTMLButtonElement>('.menu-button');
+      const menu = document.querySelector<HTMLElement>('#mobile-menu');
+      const main = document.querySelector('main');
+      const footer = document.querySelector('footer');
+      const brand = document.querySelector<HTMLElement>('.site-header .brand');
+
+      function setMenu(open: boolean, restoreFocus = true) {
+        if (!btn || !menu) return;
+        btn.setAttribute('aria-expanded', String(open));
+        btn.textContent = open ? 'TUTUP ×' : 'MENU +';
+        menu.hidden = !open;
+        document.body.classList.toggle('menu-open', open);
+        [main, footer, brand].forEach((el) => { if (el) el.inert = open; });
+        if (open) menu.querySelector<HTMLAnchorElement>('a')?.focus();
+        else if (restoreFocus) btn.focus();
+      }
+
+      btn?.addEventListener('click', () => setMenu(btn.getAttribute('aria-expanded') !== 'true'));
+      menu?.addEventListener('click', (event) => {
+        if ((event.target as HTMLElement).closest('a')) setMenu(false, false);
       });
+      document.addEventListener('keydown', (event) => {
+        if (btn?.getAttribute('aria-expanded') !== 'true' || !menu) return;
+        if (event.key === 'Escape') setMenu(false);
+        if (event.key !== 'Tab') return;
+        const links = [...menu.querySelectorAll<HTMLAnchorElement>('a')];
+        const first = links[0];
+        const last = links[links.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          btn.focus();
+        } else if (event.shiftKey && document.activeElement === btn) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          btn.focus();
+        } else if (!event.shiftKey && document.activeElement === btn) {
+          event.preventDefault();
+          first?.focus();
+        }
+      });
+      window.matchMedia('(min-width: 801px)').addEventListener('change', (event) => {
+        if (event.matches) setMenu(false, false);
+      });
+
+      // Reveal once, without hiding content when JavaScript or motion is disabled.
+      const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (!motion.matches && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          });
+        }, { threshold: .08 });
+        document.querySelectorAll('[data-reveal], .section-kicker, .page-hero h1, .activity-card, .story-card, .achievement-lead, .value-grid article').forEach((el) => observer.observe(el));
+        motion.addEventListener('change', (event) => { if (event.matches) observer.disconnect(); });
+      }
     </script>
   </body>
 </html>

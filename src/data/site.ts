@@ -1,15 +1,4 @@
-export type Member = {
-  code: string;
-  name: string;
-  nickname: string;
-  role: string;
-  division: string;
-  joined: number;
-  status: 'ACTIVE' | 'ALUMNI';
-  bio: string;
-  instagram?: string;
-  photo?: string;
-};
+export type { Member } from './members';
 
 export type Activity = {
   no: string;
@@ -28,13 +17,12 @@ import {
   photoOnlyMembers,
   getUploadedMemberPhotoUrl,
   hasUploadedMemberPhoto,
-  hasBlackBackgroundMemberPhoto,
   getMemberTone,
   memberTones
 } from './member-assets';
 
 export const members = [...memberDataset, ...photoOnlyMembers];
-export { getMemberByCode, hasUploadedMemberPhoto, hasBlackBackgroundMemberPhoto, getMemberTone, memberTones };
+export { getMemberByCode, hasUploadedMemberPhoto, getMemberTone, memberTones };
 export const getMemberPhotoUrl = getUploadedMemberPhotoUrl;
 
 export const memberPlaceholders = {

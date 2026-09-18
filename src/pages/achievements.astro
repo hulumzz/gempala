@@ -33,10 +33,132 @@ import { achievements, achievementPhoto } from '../data/site';
   </section>
 
   <style>
-    .wall{background:var(--lime);border-top:var(--line)}
-    .achievement-lead{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:48px;align-items:center;margin-bottom:92px}.achievement-photo{margin:0;background:var(--paper);padding:9px;transform:rotate(-1.5deg)}.achievement-photo img{width:100%;height:auto;border:2px solid var(--ink)}.achievement-photo figcaption{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:13px 5px 4px;font:900 9px Archivo;letter-spacing:.07em}.achievement-copy{border-left:var(--line);padding-left:34px}.achievement-copy h2{font:900 clamp(42px,6vw,76px)/.88 Archivo;letter-spacing:-.06em;margin:24px 0;text-transform:uppercase}.achievement-copy p{font-size:14px;line-height:1.7;max-width:420px}
-    .year-mark{font:900 12px Archivo;letter-spacing:.12em;border-bottom:var(--line);padding-bottom:16px}.win{display:grid;grid-template-columns:90px 1fr 110px;gap:28px;align-items:center;padding:40px 0;border-bottom:var(--line)}.win-no{font:900 26px Archivo}.win h2{font:900 clamp(35px,5vw,66px)/.95 Archivo;letter-spacing:-.05em;margin:16px 0}.win p{max-width:650px;line-height:1.7}.win-badge{width:90px;height:90px;border:2px solid var(--ink);border-radius:50%;display:grid;place-items:center;text-align:center;font:900 11px Archivo;transform:rotate(8deg);background:var(--paper)}
-    @media(max-width:800px){.achievement-lead{grid-template-columns:1fr;gap:32px;margin-bottom:68px}.achievement-copy{border-left:0;border-top:var(--line);padding:28px 0 0}.win{grid-template-columns:45px 1fr}.win-badge{display:none}}
-    @media(max-width:520px){.achievement-photo{padding:6px}.achievement-photo figcaption{font-size:8px;align-items:flex-start;flex-direction:column}.achievement-copy h2{font-size:clamp(38px,12vw,58px)}}
+    .wall {
+      background: var(--lime);
+      border-top: var(--line);
+    }
+    .achievement-lead {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+      gap: 48px;
+      align-items: center;
+      margin-bottom: 92px;
+    }
+    .achievement-photo {
+      margin: 0;
+      background: var(--paper);
+      padding: 9px;
+      transform: rotate(-1.5deg);
+    }
+    .achievement-photo img {
+      width: 100%;
+      height: auto;
+      border: 2px solid var(--ink);
+    }
+    .achievement-photo figcaption {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 13px 5px 4px;
+      font: 900 9px Archivo;
+      letter-spacing: 0.07em;
+    }
+    .achievement-copy {
+      border-left: var(--line);
+      padding-left: 34px;
+    }
+    .achievement-copy h2 {
+      font: 900 clamp(42px, 6vw, 76px)/0.88 Archivo;
+      letter-spacing: -0.06em;
+      margin: 24px 0;
+      text-transform: uppercase;
+    }
+    .achievement-copy p {
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 420px;
+    }
+    .year-mark {
+      font: 900 12px Archivo;
+      letter-spacing: 0.12em;
+      border-bottom: var(--line);
+      padding-bottom: 16px;
+    }
+    .win {
+      display: grid;
+      grid-template-columns: 90px 1fr 110px;
+      gap: 28px;
+      align-items: center;
+      padding: 40px 0;
+      border-bottom: var(--line);
+    }
+    .win-no {
+      font: 900 26px Archivo;
+    }
+    .win h2 {
+      font: 900 clamp(35px, 5vw, 66px)/0.95 Archivo;
+      letter-spacing: -0.05em;
+      margin: 16px 0;
+    }
+    .win p {
+      max-width: 650px;
+      line-height: 1.7;
+    }
+    .win-badge {
+      width: 90px;
+      height: 90px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font: 900 11px Archivo;
+      transform: rotate(8deg);
+      background: var(--paper);
+    }
+    .win {
+      grid-template-columns: 70px minmax(0, 1fr) 96px;
+    }
+    .win h2 {
+      overflow-wrap: anywhere;
+      line-height: 1.04;
+    }
+    @media (max-width: 800px) {
+      .achievement-lead {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        margin-bottom: 68px;
+      }
+      .achievement-copy {
+        border-left: 0;
+        border-top: var(--line);
+        padding: 28px 0 0;
+      }
+      .win {
+        grid-template-columns: 32px minmax(0, 1fr);
+        gap: 14px;
+        padding: 28px 0;
+      }
+      .win h2 {
+        font-size: clamp(28px, 8.8vw, 52px);
+      }
+      .win-badge {
+        display: none;
+      }
+    }
+    @media (max-width: 520px) {
+      .achievement-photo {
+        padding: 6px;
+      }
+      .achievement-photo figcaption {
+        font-size: 8px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .achievement-copy h2 {
+        font-size: clamp(38px, 12vw, 58px);
+      }
+    }
   </style>
 </BaseLayout>

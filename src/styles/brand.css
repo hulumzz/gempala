@@ -1,1 +1,95 @@
-:root{--pink:#ff4fa3;--pink-soft:#ffb5d7;--brand-accent:var(--pink)}::selection{background:var(--pink);color:var(--ink)}.brand{gap:7px}.brand-mark{width:33px;height:33px;display:grid;place-items:center;flex:0 0 auto;filter:drop-shadow(2px 2px 0 var(--ink))}.brand-mark img{width:100%;height:100%;object-fit:contain}.brand-name{color:var(--pink);text-shadow:1px 1px 0 var(--ink)}.brand-dot{display:none}.desktop-nav .nav-link:after{background:var(--pink)}.brutal-button{background:var(--pink)}.section-kicker:before{background:var(--pink)}.ticker{background:var(--pink)}.ticker-track{color:var(--ink)}.footer-rail{background:var(--pink)}.footer-rail i{background:var(--paper)}.footer-intro h2 em{color:var(--pink)}.footer-label{color:var(--pink-soft)}.footer-nav a:hover{color:var(--pink)}.footer-stamp{background:var(--paper);padding:3px}.footer-stamp img{width:100%;height:100%;object-fit:contain}.footer-word{color:var(--pink)}.label.pink,.label.gempala{background:var(--pink)}.hero h1 span{color:var(--pink)!important}.avatar-faux{background:var(--pink)}.purple-story{background:var(--pink)!important}
+:root {
+  --pink: #ff4fa3;
+  --pink-soft: #ffb5d7;
+  --brand-accent: var(--pink);
+}
+::selection {
+  background: var(--pink);
+  color: var(--ink);
+}
+.brand {
+  gap: 7px;
+}
+.brand-mark {
+  width: 33px;
+  height: 33px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  filter: drop-shadow(2px 2px 0 var(--ink));
+}
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.brand-name {
+  color: var(--pink);
+  text-shadow: 1px 1px 0 var(--ink);
+}
+.brand-dot {
+  display: none;
+}
+.desktop-nav .nav-link:after {
+  background: var(--pink);
+}
+.brutal-button {
+  background: var(--pink);
+}
+.section-kicker:before {
+  background: var(--pink);
+}
+.ticker {
+  background: var(--pink);
+}
+.ticker-track {
+  color: var(--ink);
+}
+.footer-rail {
+  background: var(--pink);
+}
+.footer-rail i {
+  background: var(--paper);
+}
+.footer-intro h2 em {
+  color: var(--pink);
+}
+.footer-label {
+  color: var(--pink-soft);
+}
+.footer-nav a:hover {
+  color: var(--pink);
+}
+.footer-stamp {
+  background: var(--paper);
+  padding: 3px;
+}
+.footer-stamp img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.footer-word {
+  color: var(--pink);
+}
+.label.pink,
+.label.gempala {
+  background: var(--pink);
+}
+
+/* A brief, gentle greeting every nine seconds on the home page. */
+.brand-home .brand-mark { animation: brand-greeting 9s ease-in-out infinite; transform-origin: 50% 70%; }
+.brand-home .brand-name { animation: brand-glow 9s ease-in-out infinite; }
+@keyframes brand-greeting {
+  0%, 82%, 100% { transform: translateY(0) rotate(0); }
+  87% { transform: translateY(-2px) rotate(-4deg); }
+  93% { transform: translateY(-1px) rotate(3deg); }
+}
+@keyframes brand-glow {
+  0%, 82%, 100% { opacity: 1; transform: translateY(0); }
+  89% { opacity: .82; transform: translateY(-1px); }
+}
+.menu-open .brand-home span { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .brand-home .brand-mark, .brand-home .brand-name { animation: none !important; }
+}

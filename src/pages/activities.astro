@@ -22,7 +22,7 @@ import { activities } from '../data/site';
       </div>
 
       <div class="entries">
-        {activities.map((activity, index) => <article class:list={['entry', activity.orientation, `entry-${index + 1}`]} data-category={activity.category.toUpperCase()}>
+        {activities.map((activity, index) => <article class:list={['entry', activity.orientation, `entry-${index + 1}`]} id={`activity-${activity.no}`} data-category={activity.category.toUpperCase()}>
           <figure class="entry-photo">
             <img src={activity.image} alt={activity.imageAlt} loading={index === 0 ? 'eager' : 'lazy'} width={activity.orientation === 'portrait' ? '864' : '1536'} height={activity.orientation === 'portrait' ? '1536' : activity.no === '023' ? '1042' : '1152'} />
             <figcaption>PHOTO ARCHIVE / {activity.no}</figcaption>
@@ -41,8 +41,10 @@ import { activities } from '../data/site';
     const filters = [...document.querySelectorAll('[data-filter]')];
     const entries = [...document.querySelectorAll('.entry')];
     const status = document.querySelector('.filter-status');
+    const grid = document.querySelector('.entries');
     filters.forEach((button) => button.addEventListener('click', () => {
       const filter = button.dataset.filter;
+      grid?.classList.toggle('is-filtered', filter !== 'ALL');
       let count = 0;
       filters.forEach((item) => {
         const active = item === button;
@@ -59,14 +61,204 @@ import { activities } from '../data/site';
   </script>
 
   <style>
-    .activity-board{background:var(--purple);border-top:var(--line)}
-    .archive-head{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:44px}.filters{display:flex;flex-wrap:wrap;gap:10px}.filters button{cursor:pointer;transition:transform .14s,background .14s}.filters button:hover{transform:translateY(-2px)}.filters .is-active{background:var(--lime);box-shadow:3px 3px 0 var(--ink)}.filter-status{margin:0;color:var(--paper);text-align:right}
-    .entries{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:36px 26px;align-items:start}
-    .entry{background:var(--white);border:var(--line);box-shadow:var(--shadow);border-radius:var(--radius);overflow:hidden;min-width:0}.entry-1{grid-column:1 / span 5;grid-row:span 2}.entry-2{grid-column:6 / -1;margin-top:74px;transform:rotate(.45deg)}.entry-3{grid-column:5 / -1;transform:rotate(-.35deg)}
-    .entry-photo{margin:0;border-bottom:var(--line);position:relative;background:var(--ink);overflow:hidden}.entry-photo img{display:block;width:100%;height:auto}.entry-photo figcaption{position:absolute;left:14px;bottom:14px;background:var(--paper);border:var(--line);padding:8px 10px;font:900 9px Archivo;letter-spacing:.07em;box-shadow:3px 3px var(--ink);transform:rotate(-2deg)}
-    .entry-info{padding:22px 24px 24px}.entry-meta,.entry-bottom{display:flex;justify-content:space-between;align-items:center;gap:18px}.entry-info h2{font:900 clamp(35px,5vw,66px)/.92 Archivo;letter-spacing:-.055em;margin:38px 0 28px;text-transform:uppercase}.portrait .entry-info h2{font-size:clamp(34px,4.4vw,58px)}.entry-bottom{border-top:2px solid var(--ink);padding-top:12px}.entry-bottom p{font:700 11px Archivo;margin:0}.entry-bottom .arrow{font-size:24px}
-    .entry[hidden]{display:none}
-    @media(max-width:900px){.archive-head{align-items:flex-start;flex-direction:column}.filter-status{text-align:left}.entries{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}.entry-1,.entry-2,.entry-3{grid-column:auto;grid-row:auto;margin-top:0;transform:none}.entry-1{grid-row:span 2}.entry-info h2{font-size:clamp(32px,6vw,54px)}}
-    @media(max-width:650px){.entries{grid-template-columns:1fr}.entry-1{grid-row:auto}.entry{max-width:620px;width:100%;margin-inline:auto}.entry-info{padding:18px}.entry-info h2{margin:28px 0 22px}.entry-meta{align-items:flex-start}.entry-bottom{align-items:end}.entry-photo figcaption{font-size:8px}}
+    .activity-board {
+      background: var(--purple);
+      border-top: var(--line);
+    }
+    .archive-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 44px;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .filters button {
+      cursor: pointer;
+      transition:
+        transform 0.14s,
+        background 0.14s;
+    }
+    .filters button:hover {
+      transform: translateY(-2px);
+    }
+    .filters .is-active {
+      background: var(--lime);
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+    .filter-status {
+      margin: 0;
+      color: var(--paper);
+      text-align: right;
+    }
+    .entries {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 36px 26px;
+      align-items: start;
+    }
+    .entry {
+      background: var(--white);
+      border: var(--line);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      overflow: hidden;
+      min-width: 0;
+    }
+    .entry-1 {
+      grid-column: 1 / span 5;
+      grid-row: span 2;
+    }
+    .entry-2 {
+      grid-column: 6 / -1;
+      margin-top: 74px;
+      transform: rotate(0.45deg);
+    }
+    .entry-3 {
+      grid-column: 5 / -1;
+      transform: rotate(-0.35deg);
+    }
+    .entry-photo {
+      margin: 0;
+      border-bottom: var(--line);
+      position: relative;
+      background: var(--ink);
+      overflow: hidden;
+    }
+    .entry-photo img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .entry-photo figcaption {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      background: var(--paper);
+      border: var(--line);
+      padding: 8px 10px;
+      font: 900 9px Archivo;
+      letter-spacing: 0.07em;
+      box-shadow: 3px 3px var(--ink);
+      transform: rotate(-2deg);
+    }
+    .entry-info {
+      padding: 22px 24px 24px;
+    }
+    .entry-meta,
+    .entry-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+    }
+    .entry-info h2 {
+      font: 900 clamp(35px, 5vw, 66px)/0.92 Archivo;
+      letter-spacing: -0.055em;
+      margin: 38px 0 28px;
+      text-transform: uppercase;
+    }
+    .portrait .entry-info h2 {
+      font-size: clamp(34px, 4.4vw, 58px);
+    }
+    .entry-bottom {
+      border-top: 2px solid var(--ink);
+      padding-top: 12px;
+    }
+    .entry-bottom p {
+      font: 700 11px Archivo;
+      margin: 0;
+    }
+    .entry-bottom .arrow {
+      font-size: 24px;
+    }
+    .entry[hidden] {
+      display: none;
+    }
+    .entry {
+      scroll-margin-top: 28px;
+    }
+    .entries.is-filtered {
+      grid-template-columns: minmax(0, 760px);
+      justify-content: center;
+    }
+    .entries.is-filtered .entry {
+      grid-column: auto;
+      grid-row: auto;
+      margin-top: 0;
+      transform: none;
+    }
+    .entry-meta,
+    .entry-bottom {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .entry-info h2 {
+      overflow-wrap: anywhere;
+      line-height: 1.02;
+    }
+    .entry:target {
+      outline: 4px solid var(--lime);
+      outline-offset: 7px;
+    }
+    @media (max-width: 900px) {
+      .archive-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .filter-status {
+        text-align: left;
+      }
+      .entries {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 28px;
+      }
+      .entry-1,
+      .entry-2,
+      .entry-3 {
+        grid-column: auto;
+        grid-row: auto;
+        margin-top: 0;
+        transform: none;
+      }
+      .entry-1 {
+        grid-row: span 2;
+      }
+      .entry-info h2 {
+        font-size: clamp(32px, 6vw, 54px);
+      }
+    }
+    @media (max-width: 650px) {
+      .entries {
+        grid-template-columns: 1fr;
+      }
+      .entry-1 {
+        grid-row: auto;
+      }
+      .entry {
+        max-width: 620px;
+        width: 100%;
+        margin-inline: auto;
+      }
+      .entry-info {
+        padding: 18px;
+      }
+      .entry-info h2 {
+        margin: 28px 0 22px;
+      }
+      .entry-meta {
+        align-items: flex-start;
+      }
+      .entry-bottom {
+        align-items: end;
+      }
+      .entry-photo figcaption {
+        font-size: 8px;
+      }
+    }
   </style>
 </BaseLayout>
