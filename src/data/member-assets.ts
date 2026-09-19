@@ -12,6 +12,7 @@ const uploadedMemberPhotos = new Set([
   'zahra.webp',
   'khafid.webp',
   'amelia.webp',
+  'nurul.webp',
   'revans.webp',
   'ulin.webp',
   'ujwala.webp',
